@@ -40,6 +40,10 @@ public class PayCommand extends Command {
 
         Player player = (Player) sender;
         OfflinePlayer receiver = Utils.getOfflinePlayer(args[0]);
+        if (receiver == player) {
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getCannotDo());
+            return false;
+        }
         if (!instance.getEconomyHandler().hasAccount(receiver)) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return false;
