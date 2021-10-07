@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
 import me.hsgamer.bettereconomy.command.BalanceCommand;
 import me.hsgamer.bettereconomy.command.BalanceTopCommand;
+import me.hsgamer.bettereconomy.command.MainCommand;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
 import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
@@ -51,6 +52,7 @@ public final class BetterEconomy extends BasePlugin {
         });
         registerCommand(new BalanceCommand(this));
         registerCommand(new BalanceTopCommand(this));
+        registerCommand(new MainCommand(this));
         registerListener(new JoinListener(this));
     }
 
