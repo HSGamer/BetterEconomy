@@ -40,7 +40,7 @@ public class BalanceTopCommand extends Command {
         }
         int startIndex = (10 * page) % list.size();
         int endIndex = Math.min(list.size(), startIndex + 10);
-        for (int index = startIndex; index <= endIndex; index++) {
+        for (int index = startIndex; index < endIndex; index++) {
             PlayerBalanceSnapshot snapshot = list.get(index);
             MessageUtils.sendMessage(
                     sender,
