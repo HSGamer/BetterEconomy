@@ -21,10 +21,16 @@ public class FlatFileEconomyHandler extends EconomyHandler {
         task = new BukkitRunnable() {
             @Override
             public void run() {
-                if (needSaving.get()) {
-                    storageFile.save();
-                    needSaving.set(false);
+                if (!needSaving.get()) {
+                    return;
                 }
+                needSaving.set(false);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        storageFile.save();
+                    }
+                }.runTask(instance);
             }
         }.runTaskTimerAsynchronously(instance, instance.getMainConfig().getSaveFilePeriod(), instance.getMainConfig().getSaveFilePeriod());
     }
