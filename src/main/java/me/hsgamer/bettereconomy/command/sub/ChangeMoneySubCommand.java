@@ -12,8 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class ChangeMoneySubCommand extends SubCommand {
@@ -29,17 +31,21 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         OfflinePlayer offlinePlayer = Utils.getOfflinePlayer(args[0]);
-        double amount = Double.parseDouble(args[1]);
         if (!instance.getEconomyHandler().hasAccount(offlinePlayer)) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return;
         }
-        executeChange(sender, offlinePlayer, amount);
+        Optional<Double> amount = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value > 0);
+        if (!amount.isPresent()) {
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
+            return;
+        }
+        executeChange(sender, offlinePlayer, amount.get());
     }
 
     @Override
     public boolean isProperUsage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        return args.length >= 2 && Validate.isValidPositiveNumber(args[1]);
+        return args.length >= 2;
     }
 
     @Override
