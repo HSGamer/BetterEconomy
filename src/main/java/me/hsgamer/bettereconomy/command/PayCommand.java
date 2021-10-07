@@ -60,7 +60,7 @@ public class PayCommand extends Command {
         double amount = optionalAmount.get();
 
         instance.getEconomyHandler().withdraw(player, amount);
-        instance.getEconomyHandler().deposit(player, amount);
+        instance.getEconomyHandler().deposit(receiver, amount);
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
                         .replace("{balance}", Double.toString(amount))
