@@ -30,12 +30,8 @@ public final class BetterEconomy extends BasePlugin {
     private EconomyHandler economyHandler;
 
     @Override
-    public void preLoad() {
-        MessageUtils.setPrefix(messageConfig::getPrefix);
-    }
-
-    @Override
     public void load() {
+        MessageUtils.setPrefix(messageConfig::getPrefix);
         getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Highest);
 
         mainConfig.setup();
