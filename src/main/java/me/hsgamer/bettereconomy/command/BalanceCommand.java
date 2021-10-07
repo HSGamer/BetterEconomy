@@ -22,6 +22,9 @@ public class BalanceCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (!testPermission(sender)) {
+            return false;
+        }
         OfflinePlayer who;
         if (args.length > 0 && sender.hasPermission(Permissions.BALANCE_OTHERS)) {
             who = Utils.getOfflinePlayer(args[0]);
