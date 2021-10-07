@@ -7,6 +7,7 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
 import org.bukkit.plugin.Plugin;
 
 @Getter
+@SuppressWarnings("all")
 public class MessageConfig extends AnnotatedConfig {
     private @ConfigPath("prefix") String prefix = "&f[&6BetterEconomy&f] &r";
     private @ConfigPath("player-not-found") String playerNotFound = "&cThe player is not found";

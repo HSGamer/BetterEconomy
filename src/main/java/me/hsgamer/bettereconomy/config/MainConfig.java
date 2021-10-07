@@ -7,6 +7,7 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
 import org.bukkit.plugin.Plugin;
 
 @Getter
+@SuppressWarnings("all")
 public class MainConfig extends AnnotatedConfig {
     private @ConfigPath("handler-type") String handlerType = "file";
     private @ConfigPath("currency.singular") String currencySingular = "$";
