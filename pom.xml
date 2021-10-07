@@ -119,46 +119,65 @@
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-common</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-baseplugin</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-subcommand</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-utils</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-config</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-config-annotated</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-builder</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-database-client-java</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-database-driver-mysql</artifactId>
             <version>${core.version}</version>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.protobuf</groupId>
+                    <artifactId>protobuf-parent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
