@@ -16,8 +16,8 @@ public class BalanceCommand extends Command {
 
     public BalanceCommand(BetterEconomy instance) {
         super("balance", "Get the balance of a player", "/balance [player]", Collections.singletonList("bal"));
-        setPermission(Permissions.BALANCE.getName());
         this.instance = instance;
+        setPermission(Permissions.BALANCE.getName());
     }
 
     @Override

@@ -7,6 +7,7 @@ import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
 import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
 import me.hsgamer.bettereconomy.hook.VaultEconomyHook;
+import me.hsgamer.bettereconomy.listener.JoinListener;
 import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
@@ -34,23 +35,25 @@ public final class BetterEconomy extends BasePlugin {
     @Override
     public void load() {
         getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Highest);
+
         mainConfig.setup();
         messageConfig.setup();
+
+        ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");
     }
 
     @Override
     public void enable() {
-        ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");
-
-        registerCommand(new BalanceCommand(this));
-    }
-
-    @Override
-    public void postEnable() {
         economyHandler = ECONOMY_HANDLER_BUILDER.build(mainConfig.getHandlerType(), this).orElseGet(() -> {
             getLogger().warning("Cannot find an economy handler from the config. FlatFile will be used");
             return new FlatFileEconomyHandler(this);
         });
+        registerCommand(new BalanceCommand(this));
+        registerListener(new JoinListener(this));
+    }
+
+    @Override
+    public void postEnable() {
         topRunnable.runTaskTimerAsynchronously(this, 0, mainConfig.getUpdateBalanceTopPeriod());
     }
 
