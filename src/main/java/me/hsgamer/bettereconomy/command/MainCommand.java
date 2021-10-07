@@ -2,6 +2,10 @@ package me.hsgamer.bettereconomy.command;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
+import me.hsgamer.bettereconomy.command.sub.GiveSubCommand;
+import me.hsgamer.bettereconomy.command.sub.ReloacSubCommand;
+import me.hsgamer.bettereconomy.command.sub.SetSubCommand;
+import me.hsgamer.bettereconomy.command.sub.TakeSubCommand;
 import me.hsgamer.hscore.bukkit.subcommand.SubCommandManager;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.Command;
@@ -36,6 +40,10 @@ public class MainCommand extends Command {
                 MessageUtils.sendMessage(sender, instance.getMessageConfig().getArgNotFound());
             }
         };
+        this.subCommandManager.registerSubcommand(new GiveSubCommand(instance));
+        this.subCommandManager.registerSubcommand(new TakeSubCommand(instance));
+        this.subCommandManager.registerSubcommand(new SetSubCommand(instance));
+        this.subCommandManager.registerSubcommand(new ReloacSubCommand(instance));
     }
 
     @Override
