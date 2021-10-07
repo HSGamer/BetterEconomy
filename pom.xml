@@ -114,6 +114,11 @@
         </dependency>
         <dependency>
             <groupId>me.HSGamer</groupId>
+            <artifactId>HSCore-bukkit-utils</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-bukkit-config</artifactId>
             <version>${core.version}</version>
         </dependency>
