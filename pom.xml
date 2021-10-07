@@ -55,6 +55,10 @@
                                     <pattern>me.hsgamer.hscore</pattern>
                                     <shadedPattern>me.hsgamer.bettereconomy.core</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.hsgamer.bettereconomy.bstats</shadedPattern>
+                                </relocation>
                             </relocations>
                             <filters>
                                 <filter>
@@ -184,6 +188,13 @@
             <artifactId>annotations</artifactId>
             <version>22.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>

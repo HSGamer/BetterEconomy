@@ -17,6 +17,7 @@ import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.ServicePriority;
 
 public final class BetterEconomy extends BasePlugin {
@@ -54,6 +55,9 @@ public final class BetterEconomy extends BasePlugin {
         registerCommand(new PayCommand(this));
         registerCommand(new MainCommand(this));
         registerListener(new JoinListener(this));
+        if (mainConfig.isMetrics()) {
+            new Metrics(this, 12981);
+        }
     }
 
     @Override

@@ -9,6 +9,8 @@ import org.bukkit.plugin.Plugin;
 @Getter
 @SuppressWarnings("all")
 public class MainConfig extends AnnotatedConfig {
+    private @ConfigPath("metrics")
+    boolean metrics = true;
     private @ConfigPath("handler-type")
     String handlerType = "file";
     private @ConfigPath("currency.singular")
