@@ -16,6 +16,12 @@ public class MainConfig extends AnnotatedConfig {
     private @ConfigPath("balance.file-save-period") long saveFilePeriod = 200;
     private @ConfigPath("balance.start-amount") double startAmount = 0;
 
+    private @ConfigPath("database.mysql.host") String mysqlHost = "localhost";
+    private @ConfigPath("database.mysql.port") String mysqlPort = "3306";
+    private @ConfigPath("database.mysql.dbname") String mysqlDatabaseName = "";
+    private @ConfigPath("database.mysql.username") String mysqlUsername = "root";
+    private @ConfigPath("database.mysql.password") String mysqlPassword = "";
+
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
     }

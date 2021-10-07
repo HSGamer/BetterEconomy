@@ -143,6 +143,16 @@
             <version>${core.version}</version>
         </dependency>
         <dependency>
+            <groupId>me.HSGamer</groupId>
+            <artifactId>HSCore-database-client-java</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.HSGamer</groupId>
+            <artifactId>HSCore-database-driver-mysql</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>21.0.1</version>
