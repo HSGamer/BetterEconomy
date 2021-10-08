@@ -37,6 +37,9 @@ public class MainConfig extends AnnotatedConfig {
     private @ConfigPath("database.mysql.password")
     String mysqlPassword = "";
 
+    private @ConfigPath("database.sqlite.dbname")
+    String sqliteDatabaseName = "balances";
+
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
     }

@@ -9,7 +9,8 @@ import me.hsgamer.bettereconomy.command.PayCommand;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
 import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
-import me.hsgamer.bettereconomy.handler.MySQLEconomyHandler;
+import me.hsgamer.bettereconomy.handler.MySqlEconomyHandler;
+import me.hsgamer.bettereconomy.handler.SqliteEconomyHandler;
 import me.hsgamer.bettereconomy.hook.VaultEconomyHook;
 import me.hsgamer.bettereconomy.listener.JoinListener;
 import me.hsgamer.bettereconomy.top.TopRunnable;
@@ -41,7 +42,8 @@ public final class BetterEconomy extends BasePlugin {
         messageConfig.setup();
 
         ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");
-        ECONOMY_HANDLER_BUILDER.register(MySQLEconomyHandler::new, "mysql");
+        ECONOMY_HANDLER_BUILDER.register(MySqlEconomyHandler::new, "mysql");
+        ECONOMY_HANDLER_BUILDER.register(SqliteEconomyHandler::new, "sqlite");
     }
 
     @Override

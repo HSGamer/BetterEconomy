@@ -2,10 +2,10 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
+import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.PreparedStatementContainer;
 import me.hsgamer.hscore.database.client.sql.java.JavaSqlClient;
-import me.hsgamer.hscore.database.driver.MySqlDriver;
 import org.bukkit.OfflinePlayer;
 
 import java.sql.Connection;
@@ -14,20 +14,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
-public class MySQLEconomyHandler extends EconomyHandler {
+class SqlEconomyHandler extends EconomyHandler {
 
     private final Connection connection;
 
-    public MySQLEconomyHandler(BetterEconomy instance) {
+    SqlEconomyHandler(BetterEconomy instance, Setting setting, Driver driver) {
         super(instance);
-        final Setting setting = new Setting();
-        setting.setHost(instance.getMainConfig().getMysqlHost());
-        setting.setPort(instance.getMainConfig().getMysqlPort());
-        setting.setDatabaseName(instance.getMainConfig().getMysqlDatabaseName());
-        setting.setUsername(instance.getMainConfig().getMysqlUsername());
-        setting.setPassword(instance.getMainConfig().getMysqlPassword());
         try {
-            JavaSqlClient client = new JavaSqlClient(setting, new MySqlDriver());
+            JavaSqlClient client = new JavaSqlClient(setting, driver);
             connection = client.getConnection();
         } catch (ClassNotFoundException | SQLException e) {
             throw new IllegalStateException("constructor()#connection", e);
