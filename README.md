@@ -15,7 +15,7 @@ A simple Vault-based economy plugin
 ## Config
 ```yaml
 # The file handler to store the balance
-# Allow: file, mysql
+# Allow: file, mysql, sqlite, json
 handler-type: file
 
 # Settings on formatting the balance
