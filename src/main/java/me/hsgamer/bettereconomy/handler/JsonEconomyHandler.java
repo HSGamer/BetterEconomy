@@ -61,7 +61,7 @@ public class JsonEconomyHandler extends EconomyHandler {
                     @Override
                     public void run() {
                         try (Writer writer = new FileWriter(file)) {
-                            new JSONObject().writeJSONString(writer);
+                            jsonObject.writeJSONString(writer);
                         } catch (IOException e) {
                             instance.getLogger().log(Level.WARNING, "Error when saving file", e);
                         }
@@ -115,7 +115,7 @@ public class JsonEconomyHandler extends EconomyHandler {
     public void disable() {
         task.cancel();
         try (Writer writer = new FileWriter(file)) {
-            new JSONObject().writeJSONString(writer);
+            jsonObject.writeJSONString(writer);
         } catch (IOException e) {
             instance.getLogger().log(Level.WARNING, "Error when saving file", e);
         }
