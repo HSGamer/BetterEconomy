@@ -63,7 +63,7 @@ public class PayCommand extends Command {
         instance.getEconomyHandler().deposit(receiver, amount);
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiver.getUniqueId().toString()))
         );
         return true;
