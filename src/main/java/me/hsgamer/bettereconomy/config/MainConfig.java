@@ -6,6 +6,9 @@ import me.hsgamer.hscore.config.AnnotatedConfig;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import org.bukkit.plugin.Plugin;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Getter
 @SuppressWarnings("all")
 public class MainConfig extends AnnotatedConfig {
@@ -42,5 +45,9 @@ public class MainConfig extends AnnotatedConfig {
 
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));
+    }
+
+    public String format(double amount) {
+        return BigDecimal.valueOf(amount).setScale(fractionalDigits, RoundingMode.HALF_EVEN).toPlainString();
     }
 }

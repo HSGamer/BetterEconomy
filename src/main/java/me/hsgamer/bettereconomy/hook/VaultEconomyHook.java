@@ -5,8 +5,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class VaultEconomyHook implements Economy {
 
     @Override
     public String format(double amount) {
-        return BigDecimal.valueOf(amount).setScale(fractionalDigits(), RoundingMode.HALF_EVEN).toPlainString();
+        return instance.getMainConfig().format(amount);
     }
 
     @Override

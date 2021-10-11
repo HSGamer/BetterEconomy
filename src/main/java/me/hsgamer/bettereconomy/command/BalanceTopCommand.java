@@ -48,7 +48,7 @@ public class BalanceTopCommand extends Command {
                     instance.getMessageConfig().getBalanceTopOutput()
                             .replace("{place}", Integer.toString(index + 1))
                             .replace("{name}", Optional.ofNullable(snapshot.getOfflinePlayer().getName()).orElse(snapshot.getOfflinePlayer().getUniqueId().toString()))
-                            .replace("{balance}", Double.toString(snapshot.getBalance()))
+                            .replace("{balance}", instance.getMainConfig().format(snapshot.getBalance()))
             );
         }
         return true;
