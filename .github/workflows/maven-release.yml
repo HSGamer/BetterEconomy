@@ -42,7 +42,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           stripHeaders: true
-          onlyLastTag: true
       - name: GH Release
         uses: softprops/action-gh-release@v1
         with:
