@@ -38,7 +38,7 @@ jobs:
           args: "./target/BetterEconomy*.jar"
       - name: Generate changelog
         id: changelog
-        uses: heinrichreimer/action-github-changelog-generator@v2.2
+        uses: heinrichreimer/action-github-changelog-generator@v2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           stripHeaders: true
