@@ -36,16 +36,10 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           args: "./target/BetterEconomy*.jar"
-      - name: Generate changelog
-        id: changelog
-        uses: heinrichreimer/action-github-changelog-generator@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          stripHeaders: true
       - name: GH Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{ steps.changelog.outputs.changelog }}
+          body: "New release of BetterEconomy"
           fail_on_unmatched_files: true
           files: "./target/BetterEconomy*.jar"
           draft: false
