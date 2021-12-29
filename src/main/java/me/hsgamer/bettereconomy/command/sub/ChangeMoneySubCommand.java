@@ -35,7 +35,7 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return;
         }
-        Optional<Double> amount = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value > 0);
+        Optional<Double> amount = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value >= 0);
         if (!amount.isPresent()) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
             return;
