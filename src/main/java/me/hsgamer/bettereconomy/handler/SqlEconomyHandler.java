@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
-class SqlEconomyHandler extends EconomyHandler {
+public abstract class SqlEconomyHandler extends EconomyHandler {
 
     private final Connection connection;
 
@@ -89,14 +89,14 @@ class SqlEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean createAccount(OfflinePlayer player) {
+    public boolean createAccount(OfflinePlayer player, double startAmount) {
         if (hasAccount(player)) {
             return false;
         }
         try (
                 PreparedStatementContainer container = PreparedStatementContainer.of(
                         connection, "INSERT INTO `economy` (`uuid`, `balance`) VALUES ( ? , ? )",
-                        player.getUniqueId().toString(), instance.getMainConfig().getStartAmount()
+                        player.getUniqueId().toString(), startAmount
                 )
         ) {
             return container.update() > 0;

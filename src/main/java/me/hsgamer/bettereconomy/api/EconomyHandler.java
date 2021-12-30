@@ -26,7 +26,11 @@ public abstract class EconomyHandler {
         return set(player, get(player) + amount);
     }
 
-    public abstract boolean createAccount(OfflinePlayer player);
+    public abstract boolean createAccount(OfflinePlayer player, double startAmount);
+
+    public boolean createAccount(OfflinePlayer player) {
+        return createAccount(player, instance.getMainConfig().getStartAmount());
+    }
 
     public void disable() {
         // EMPTY

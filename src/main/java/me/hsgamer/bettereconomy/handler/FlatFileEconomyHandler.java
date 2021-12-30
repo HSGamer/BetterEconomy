@@ -61,11 +61,11 @@ public class FlatFileEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean createAccount(OfflinePlayer player) {
+    public boolean createAccount(OfflinePlayer player, double startAmount) {
         if (hasAccount(player)) {
             return false;
         }
-        storageFile.set(player.getUniqueId().toString(), instance.getMainConfig().getStartAmount());
+        storageFile.set(player.getUniqueId().toString(), startAmount);
         needSaving.lazySet(true);
         return true;
     }

@@ -101,12 +101,12 @@ public class JsonEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean createAccount(OfflinePlayer player) {
+    public boolean createAccount(OfflinePlayer player, double startAmount) {
         if (hasAccount(player)) {
             return false;
         }
         // noinspection unchecked
-        jsonObject.put(player.getUniqueId().toString(), instance.getMainConfig().getStartAmount());
+        jsonObject.put(player.getUniqueId().toString(), startAmount);
         needSaving.lazySet(true);
         return true;
     }
