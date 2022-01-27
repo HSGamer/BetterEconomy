@@ -24,6 +24,7 @@ hook-type: VAULT
 
 # Settings on formatting the balance
 currency:
+  symbol: $
   singular: $
   plural: $
   format-fractional-digits: 2
