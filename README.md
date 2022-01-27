@@ -18,6 +18,10 @@ A simple Vault-based economy plugin
 # Allow: file, mysql, sqlite, json
 handler-type: file
 
+# The type of the hook. Used to hook an economy core
+# Allow: VAULT, TREASURY, NONE
+hook-type: VAULT
+
 # Settings on formatting the balance
 currency:
   singular: $
