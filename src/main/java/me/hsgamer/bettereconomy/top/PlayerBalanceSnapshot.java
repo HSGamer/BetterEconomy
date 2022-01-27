@@ -1,10 +1,11 @@
 package me.hsgamer.bettereconomy.top;
 
 import lombok.Data;
-import org.bukkit.OfflinePlayer;
+
+import java.util.UUID;
 
 @Data(staticConstructor = "of")
 public class PlayerBalanceSnapshot {
-    private final OfflinePlayer offlinePlayer;
+    private final UUID uuid;
     private final double balance;
 }

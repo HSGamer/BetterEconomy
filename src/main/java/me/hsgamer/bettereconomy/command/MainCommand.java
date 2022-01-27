@@ -3,7 +3,7 @@ package me.hsgamer.bettereconomy.command;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.command.sub.GiveSubCommand;
-import me.hsgamer.bettereconomy.command.sub.ReloacSubCommand;
+import me.hsgamer.bettereconomy.command.sub.ReloadSubCommand;
 import me.hsgamer.bettereconomy.command.sub.SetSubCommand;
 import me.hsgamer.bettereconomy.command.sub.TakeSubCommand;
 import me.hsgamer.hscore.bukkit.subcommand.SubCommandManager;
@@ -43,7 +43,7 @@ public class MainCommand extends Command {
         this.subCommandManager.registerSubcommand(new GiveSubCommand(instance));
         this.subCommandManager.registerSubcommand(new TakeSubCommand(instance));
         this.subCommandManager.registerSubcommand(new SetSubCommand(instance));
-        this.subCommandManager.registerSubcommand(new ReloacSubCommand(instance));
+        this.subCommandManager.registerSubcommand(new ReloadSubCommand(instance));
     }
 
     @Override

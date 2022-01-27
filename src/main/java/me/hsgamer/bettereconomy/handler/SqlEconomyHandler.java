@@ -6,12 +6,12 @@ import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.PreparedStatementContainer;
 import me.hsgamer.hscore.database.client.sql.java.JavaSqlClient;
-import org.bukkit.OfflinePlayer;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public abstract class SqlEconomyHandler extends EconomyHandler {
@@ -34,11 +34,11 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean hasAccount(OfflinePlayer player) {
+    public boolean hasAccount(UUID uuid) {
         try (
                 PreparedStatementContainer container = PreparedStatementContainer.of(
                         connection, "SELECT * FROM `economy` WHERE `uuid` = ?",
-                        player.getUniqueId().toString()
+                        uuid.toString()
                 );
                 ResultSet resultSet = container.query()
         ) {
@@ -50,11 +50,11 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public double get(OfflinePlayer player) {
+    public double get(UUID uuid) {
         try (
                 PreparedStatementContainer container = PreparedStatementContainer.of(
                         connection, "SELECT `balance` FROM `economy` WHERE `uuid` = ?",
-                        player.getUniqueId().toString()
+                        uuid.toString()
                 );
                 ResultSet resultSet = container.query()
         ) {
@@ -66,19 +66,14 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean has(OfflinePlayer player, double amount) {
-        return get(player) >= amount;
-    }
-
-    @Override
-    public boolean set(OfflinePlayer player, double amount) {
+    public boolean set(UUID uuid, double amount) {
         if (amount < 0) {
             return false;
         }
         try (
                 PreparedStatementContainer container = PreparedStatementContainer.of(
                         connection, "UPDATE `economy` SET `balance`= ? WHERE `uuid`= ?",
-                        amount, player.getUniqueId().toString()
+                        amount, uuid.toString()
                 )
         ) {
             return container.update() > 0;
@@ -89,14 +84,14 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean createAccount(OfflinePlayer player, double startAmount) {
-        if (hasAccount(player)) {
+    public boolean createAccount(UUID uuid, double startAmount) {
+        if (hasAccount(uuid)) {
             return false;
         }
         try (
                 PreparedStatementContainer container = PreparedStatementContainer.of(
                         connection, "INSERT INTO `economy` (`uuid`, `balance`) VALUES ( ? , ? )",
-                        player.getUniqueId().toString(), startAmount
+                        uuid.toString(), startAmount
                 )
         ) {
             return container.update() > 0;

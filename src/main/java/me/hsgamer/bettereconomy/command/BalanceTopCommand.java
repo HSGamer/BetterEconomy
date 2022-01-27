@@ -4,6 +4,8 @@ import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -43,11 +45,12 @@ public class BalanceTopCommand extends Command {
         int endIndex = Math.min(list.size(), startIndex + 10);
         for (int index = startIndex; index < endIndex; index++) {
             PlayerBalanceSnapshot snapshot = list.get(index);
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(snapshot.getUuid());
             MessageUtils.sendMessage(
                     sender,
                     instance.getMessageConfig().getBalanceTopOutput()
                             .replace("{place}", Integer.toString(index + 1))
-                            .replace("{name}", Optional.ofNullable(snapshot.getOfflinePlayer().getName()).orElse(snapshot.getOfflinePlayer().getUniqueId().toString()))
+                            .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
                             .replace("{balance}", instance.getMainConfig().format(snapshot.getBalance()))
             );
         }

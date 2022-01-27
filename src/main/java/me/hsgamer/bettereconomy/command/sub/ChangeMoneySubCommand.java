@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public abstract class ChangeMoneySubCommand extends SubCommand {
     protected final BetterEconomy instance;
 
-    public ChangeMoneySubCommand(BetterEconomy instance, @NotNull String name, @NotNull String description, @NotNull String usage) {
+    protected ChangeMoneySubCommand(BetterEconomy instance, @NotNull String name, @NotNull String description, @NotNull String usage) {
         super(name, description, usage, Permissions.ADMIN.getName(), true);
         this.instance = instance;
     }
@@ -31,7 +31,7 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         OfflinePlayer offlinePlayer = Utils.getOfflinePlayer(args[0]);
-        if (!instance.getEconomyHandler().hasAccount(offlinePlayer)) {
+        if (!instance.getEconomyHandler().hasAccount(offlinePlayer.getUniqueId())) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return;
         }

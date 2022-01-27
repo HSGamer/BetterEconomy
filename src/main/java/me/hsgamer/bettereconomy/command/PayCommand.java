@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.UUID;
 
 public class PayCommand extends Command {
     private final BetterEconomy instance;
@@ -44,7 +45,9 @@ public class PayCommand extends Command {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getCannotDo());
             return false;
         }
-        if (!instance.getEconomyHandler().hasAccount(receiver)) {
+        UUID playerUUID = player.getUniqueId();
+        UUID receiverUUID = receiver.getUniqueId();
+        if (!instance.getEconomyHandler().hasAccount(receiverUUID)) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return false;
         }
@@ -52,15 +55,15 @@ public class PayCommand extends Command {
         Optional<Double> optionalAmount = Validate.getNumber(args[1])
                 .map(BigDecimal::doubleValue)
                 .filter(value -> value > 0)
-                .filter(value -> instance.getEconomyHandler().has(player, value));
+                .filter(value -> instance.getEconomyHandler().has(playerUUID, value));
         if (!optionalAmount.isPresent()) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
             return false;
         }
         double amount = optionalAmount.get();
 
-        instance.getEconomyHandler().withdraw(player, amount);
-        instance.getEconomyHandler().deposit(receiver, amount);
+        instance.getEconomyHandler().withdraw(playerUUID, amount);
+        instance.getEconomyHandler().deposit(receiverUUID, amount);
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
                         .replace("{balance}", instance.getMainConfig().format(amount))

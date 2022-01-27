@@ -5,6 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.UUID;
+
 public class JoinListener implements Listener {
     private final BetterEconomy instance;
 
@@ -14,8 +16,9 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        if (!instance.getEconomyHandler().hasAccount(event.getPlayer())) {
-            instance.getEconomyHandler().createAccount(event.getPlayer());
+        UUID uuid = event.getPlayer().getUniqueId();
+        if (!instance.getEconomyHandler().hasAccount(uuid)) {
+            instance.getEconomyHandler().createAccount(uuid);
         }
     }
 }

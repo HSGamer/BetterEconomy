@@ -14,7 +14,7 @@ public class TakeSubCommand extends ChangeMoneySubCommand {
 
     @Override
     protected void executeChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
-        if (instance.getEconomyHandler().withdraw(offlinePlayer, amount)) {
+        if (instance.getEconomyHandler().withdraw(offlinePlayer.getUniqueId(), amount)) {
             MessageUtils.sendMessage(sender,
                     instance.getMessageConfig().getGiveSuccess()
                             .replace("{balance}", Double.toString(amount))

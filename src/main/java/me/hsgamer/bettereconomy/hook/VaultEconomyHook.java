@@ -49,36 +49,36 @@ public class VaultEconomyHook implements Economy {
 
     @Override
     public boolean hasAccount(OfflinePlayer player) {
-        return instance.getEconomyHandler().hasAccount(player);
+        return instance.getEconomyHandler().hasAccount(player.getUniqueId());
     }
 
     @Override
     public double getBalance(OfflinePlayer player) {
-        return instance.getEconomyHandler().get(player);
+        return instance.getEconomyHandler().get(player.getUniqueId());
     }
 
     @Override
     public boolean has(OfflinePlayer player, double amount) {
-        return instance.getEconomyHandler().has(player, amount);
+        return instance.getEconomyHandler().has(player.getUniqueId(), amount);
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
-        return instance.getEconomyHandler().withdraw(player, amount)
+        return instance.getEconomyHandler().withdraw(player.getUniqueId(), amount)
                 ? new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.SUCCESS, "Successful")
                 : new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.FAILURE, "Failed to withdraw");
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        return instance.getEconomyHandler().deposit(player, amount)
+        return instance.getEconomyHandler().deposit(player.getUniqueId(), amount)
                 ? new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.SUCCESS, "Successful")
                 : new EconomyResponse(amount, getBalance(player), EconomyResponse.ResponseType.FAILURE, "Failed to deposit");
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        return instance.getEconomyHandler().createAccount(player);
+        return instance.getEconomyHandler().createAccount(player.getUniqueId());
     }
 
     //region Expanded Methods

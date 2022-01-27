@@ -2,7 +2,6 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.json.simple.JSONObject;
@@ -11,6 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
@@ -72,41 +72,36 @@ public class JsonEconomyHandler extends EconomyHandler {
     }
 
     @Override
-    public boolean hasAccount(OfflinePlayer player) {
-        return jsonObject.containsKey(player.getUniqueId().toString());
+    public boolean hasAccount(UUID uuid) {
+        return jsonObject.containsKey(uuid.toString());
     }
 
     @Override
-    public double get(OfflinePlayer player) {
-        return Optional.ofNullable(jsonObject.get(player.getUniqueId().toString()))
+    public double get(UUID uuid) {
+        return Optional.ofNullable(jsonObject.get(uuid.toString()))
                 .map(String::valueOf)
                 .map(Double::parseDouble)
                 .orElse(0D);
     }
 
     @Override
-    public boolean has(OfflinePlayer player, double amount) {
-        return get(player) >= amount;
-    }
-
-    @Override
-    public boolean set(OfflinePlayer player, double amount) {
+    public boolean set(UUID uuid, double amount) {
         if (amount < 0) {
             return false;
         }
         // noinspection unchecked
-        jsonObject.put(player.getUniqueId().toString(), amount);
+        jsonObject.put(uuid.toString(), amount);
         needSaving.lazySet(true);
         return true;
     }
 
     @Override
-    public boolean createAccount(OfflinePlayer player, double startAmount) {
-        if (hasAccount(player)) {
+    public boolean createAccount(UUID uuid, double startAmount) {
+        if (hasAccount(uuid)) {
             return false;
         }
         // noinspection unchecked
-        jsonObject.put(player.getUniqueId().toString(), startAmount);
+        jsonObject.put(uuid.toString(), startAmount);
         needSaving.lazySet(true);
         return true;
     }

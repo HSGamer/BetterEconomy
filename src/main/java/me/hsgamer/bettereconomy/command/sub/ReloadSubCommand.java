@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class ReloacSubCommand extends SubCommand {
+public class ReloadSubCommand extends SubCommand {
     private final BetterEconomy instance;
 
-    public ReloacSubCommand(BetterEconomy instance) {
+    public ReloadSubCommand(BetterEconomy instance) {
         super("reload", "Reload the plugin", "/eco reload", Permissions.RELOAD.getName(), true);
         this.instance = instance;
     }
