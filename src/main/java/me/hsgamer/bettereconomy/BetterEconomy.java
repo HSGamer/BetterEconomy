@@ -12,12 +12,14 @@ import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
 import me.hsgamer.bettereconomy.handler.JsonEconomyHandler;
 import me.hsgamer.bettereconomy.handler.MySqlEconomyHandler;
 import me.hsgamer.bettereconomy.handler.SqliteEconomyHandler;
-import me.hsgamer.bettereconomy.hook.VaultEconomyHook;
+import me.hsgamer.bettereconomy.hook.treasury.TreasuryEconomyHook;
+import me.hsgamer.bettereconomy.hook.vault.VaultEconomyHook;
 import me.hsgamer.bettereconomy.listener.JoinListener;
 import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.ServicePriority;
@@ -37,14 +39,15 @@ public final class BetterEconomy extends BasePlugin {
     @Override
     public void load() {
         MessageUtils.setPrefix(messageConfig::getPrefix);
-        if (getServer().getPluginManager().getPlugin("Vault") != null) {
-            getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Highest);
-        } else if (getServer().getPluginManager().getPlugin("Treasury") != null) {
-            // TODO: ADD TREASURY SUPPORT
-        }
-
         mainConfig.setup();
         messageConfig.setup();
+
+        String hookType = mainConfig.getHookType();
+        if (hookType.equalsIgnoreCase("vault") && getServer().getPluginManager().getPlugin("Vault") != null) {
+            getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Normal);
+        } else if (hookType.equalsIgnoreCase("treasury") && getServer().getPluginManager().getPlugin("Treasury") != null) {
+            getServer().getServicesManager().register(EconomyProvider.class, new TreasuryEconomyHook(this), this, ServicePriority.Normal);
+        }
 
         ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");
         ECONOMY_HANDLER_BUILDER.register(MySqlEconomyHandler::new, "mysql");

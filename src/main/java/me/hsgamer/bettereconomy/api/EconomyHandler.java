@@ -35,6 +35,10 @@ public abstract class EconomyHandler {
         return createAccount(uuid, instance.getMainConfig().getStartAmount());
     }
 
+    public boolean deleteAccount(UUID uuid) {
+        return false;
+    }
+
     public void disable() {
         // EMPTY
     }

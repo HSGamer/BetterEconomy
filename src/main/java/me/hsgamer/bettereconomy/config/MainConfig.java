@@ -16,10 +16,14 @@ public class MainConfig extends AnnotatedConfig {
     boolean metrics = true;
     private @ConfigPath("handler-type")
     String handlerType = "file";
+    private @ConfigPath("hook-type")
+    String hookType = "VAULT";
     private @ConfigPath("currency.singular")
     String currencySingular = "$";
     private @ConfigPath("currency.plural")
     String currencyPlural = "$";
+    private @ConfigPath("currency.symbol")
+    String currencySymbol = "$";
     private @ConfigPath("currency.format-fractional-digits")
     int fractionalDigits = 2;
     private @ConfigPath("balance.top-update-period")
@@ -48,6 +52,14 @@ public class MainConfig extends AnnotatedConfig {
     }
 
     public String format(double amount) {
-        return BigDecimal.valueOf(amount).setScale(fractionalDigits, RoundingMode.HALF_EVEN).toPlainString();
+        return format(BigDecimal.valueOf(amount), fractionalDigits);
+    }
+
+    public String format(BigDecimal amount) {
+        return format(amount, fractionalDigits);
+    }
+
+    public String format(BigDecimal amount, int scale) {
+        return amount.setScale(scale, RoundingMode.HALF_EVEN).toPlainString();
     }
 }

@@ -1,4 +1,4 @@
-package me.hsgamer.bettereconomy.hook;
+package me.hsgamer.bettereconomy.hook.vault;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import net.milkbowl.vault.economy.Economy;
