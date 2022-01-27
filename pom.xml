@@ -128,6 +128,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>me.lokka30</groupId>
+            <artifactId>treasury-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>me.HSGamer</groupId>
             <artifactId>HSCore-common</artifactId>
             <version>${core.version}</version>

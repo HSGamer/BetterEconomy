@@ -37,7 +37,11 @@ public final class BetterEconomy extends BasePlugin {
     @Override
     public void load() {
         MessageUtils.setPrefix(messageConfig::getPrefix);
-        getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Highest);
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Highest);
+        } else if (getServer().getPluginManager().getPlugin("Treasury") != null) {
+            // TODO: ADD TREASURY SUPPORT
+        }
 
         mainConfig.setup();
         messageConfig.setup();
