@@ -1,16 +1,16 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
+import java.math.BigDecimal;
+import java.util.Locale;
+import java.util.UUID;
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.Utils;
 import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
 import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.math.BigDecimal;
-import java.util.Locale;
-import java.util.UUID;
 
 public class TreasuryCurrency implements Currency {
     private final BetterEconomy instance;
@@ -63,8 +63,73 @@ public class TreasuryCurrency implements Currency {
 
     @Override
     public void parse(@NotNull String formatted, @NotNull EconomySubscriber<BigDecimal> subscription) {
-        // TODO: A way to do this?
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED));
+        StringBuilder valueBuilder = new StringBuilder();
+        StringBuilder currencyBuilder = new StringBuilder();
+
+        boolean hadDot = false;
+        for (char c : formatted.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                continue;
+            }
+
+            if (!Character.isDigit(c) && !Utils.isSeparator(c)) {
+                currencyBuilder.append(c);
+            } else if (Character.isDigit(c)) {
+                valueBuilder.append(c);
+            } else if (Utils.isSeparator(c)) {
+                if (c == '.') {
+                    boolean nowChanged = false;
+                    if (!hadDot) {
+                        hadDot = true;
+                        nowChanged = true;
+                    }
+
+                    if (!nowChanged) {
+                        valueBuilder = new StringBuilder();
+                        break;
+                    }
+                }
+                valueBuilder.append(c);
+            }
+        }
+
+        if (currencyBuilder.length() == 0) {
+            subscription.fail(new EconomyException(FailureReasons.INVALID_CURRENCY));
+            return;
+        }
+
+        String currency = currencyBuilder.toString();
+        if (!matches(currency)) {
+            subscription.fail(new EconomyException(FailureReasons.INVALID_CURRENCY));
+            return;
+        }
+
+        if (valueBuilder.length() == 0) {
+            subscription.fail(new EconomyException(FailureReasons.INVALID_VALUE));
+            return;
+        }
+
+        try {
+            double value = Double.parseDouble(valueBuilder.toString());
+            if (value < 0) {
+                subscription.fail(new EconomyException(EconomyFailureReason.NEGATIVE_BALANCES_NOT_SUPPORTED));
+                return;
+            }
+
+            subscription.succeed(BigDecimal.valueOf(value));
+        } catch (NumberFormatException e) {
+            subscription.fail(new EconomyException(FailureReasons.INVALID_VALUE, e));
+        }
+    }
+
+    private boolean matches(String currency) {
+        if (currency.length() == 1) {
+            return currency.charAt(0) == getDecimal();
+        } else {
+            return currency.equalsIgnoreCase(getSymbol())
+                    || currency.equalsIgnoreCase(getDisplayNameSingular())
+                    || currency.equalsIgnoreCase(getDisplayNamePlural());
+        }
     }
 
     @Override
