@@ -1,8 +1,5 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
-import java.math.BigDecimal;
-import java.util.Locale;
-import java.util.UUID;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Utils;
 import me.lokka30.treasury.api.economy.currency.Currency;
@@ -11,6 +8,10 @@ import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
 import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+import java.util.UUID;
 
 public class TreasuryCurrency implements Currency {
     private final BetterEconomy instance;

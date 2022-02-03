@@ -1,9 +1,7 @@
 package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
-import me.hsgamer.bettereconomy.api.EconomyHandler;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
+import me.hsgamer.bettereconomy.api.AutoSaveEconomyHandler;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,14 +9,11 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
-public class JsonEconomyHandler extends EconomyHandler {
+public class JsonEconomyHandler extends AutoSaveEconomyHandler {
     private final File file;
     private final JSONObject jsonObject;
-    private final AtomicBoolean needSaving = new AtomicBoolean();
-    private final BukkitTask task;
 
     public JsonEconomyHandler(BetterEconomy instance) {
         super(instance);
@@ -49,26 +44,15 @@ public class JsonEconomyHandler extends EconomyHandler {
             tempJson = new JSONObject();
         }
         jsonObject = tempJson;
+    }
 
-        task = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (!needSaving.get()) {
-                    return;
-                }
-                needSaving.set(false);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        try (Writer writer = new FileWriter(file)) {
-                            jsonObject.writeJSONString(writer);
-                        } catch (IOException e) {
-                            instance.getLogger().log(Level.WARNING, "Error when saving file", e);
-                        }
-                    }
-                }.runTask(instance);
-            }
-        }.runTaskTimerAsynchronously(instance, instance.getMainConfig().getSaveFilePeriod(), instance.getMainConfig().getSaveFilePeriod());
+    @Override
+    protected void save() {
+        try (Writer writer = new FileWriter(file)) {
+            jsonObject.writeJSONString(writer);
+        } catch (IOException e) {
+            instance.getLogger().log(Level.WARNING, "Error when saving file", e);
+        }
     }
 
     @Override
@@ -91,7 +75,7 @@ public class JsonEconomyHandler extends EconomyHandler {
         }
         // noinspection unchecked
         jsonObject.put(uuid.toString(), amount);
-        needSaving.lazySet(true);
+        enableSave();
         return true;
     }
 
@@ -102,17 +86,7 @@ public class JsonEconomyHandler extends EconomyHandler {
         }
         // noinspection unchecked
         jsonObject.put(uuid.toString(), startAmount);
-        needSaving.lazySet(true);
+        enableSave();
         return true;
-    }
-
-    @Override
-    public void disable() {
-        task.cancel();
-        try (Writer writer = new FileWriter(file)) {
-            jsonObject.writeJSONString(writer);
-        } catch (IOException e) {
-            instance.getLogger().log(Level.WARNING, "Error when saving file", e);
-        }
     }
 }
