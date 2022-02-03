@@ -26,7 +26,11 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
         this.instance = instance;
     }
 
-    protected abstract void executeChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount);
+    protected abstract boolean tryChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount);
+
+    protected abstract void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount);
+
+    protected abstract void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount);
 
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
@@ -35,12 +39,17 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return;
         }
-        Optional<Double> amount = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value >= 0);
-        if (!amount.isPresent()) {
+        Optional<Double> amountOptional = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value >= 0);
+        if (!amountOptional.isPresent()) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
             return;
         }
-        executeChange(sender, offlinePlayer, amount.get());
+        double amount = amountOptional.get();
+        if (tryChange(sender, offlinePlayer, amount)) {
+            sendSuccessMessage(sender, offlinePlayer, amount);
+        } else {
+            sendFailMessage(sender, offlinePlayer, amount);
+        }
     }
 
     @Override

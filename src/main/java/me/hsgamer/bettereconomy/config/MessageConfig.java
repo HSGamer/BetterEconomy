@@ -31,6 +31,12 @@ public class MessageConfig extends AnnotatedConfig {
     String takeSuccess = "&aSuccessfully take {balance} from {name}";
     private @ConfigPath("set-success")
     String setSuccess = "&aSuccessfully set {balance} to {name}";
+    private @ConfigPath("give-fail")
+    String giveFail = "&cFailed to give {balance} to {name}";
+    private @ConfigPath("take-fail")
+    String takeFail = "&cFailed to take {balance} from {name}";
+    private @ConfigPath("set-fail")
+    String setFail = "&cFailed to set {balance} to {name}";
     private @ConfigPath("success")
     String success = "&aSuccess";
     private @ConfigPath("cannot-do")

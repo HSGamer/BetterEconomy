@@ -13,15 +13,25 @@ public class TakeSubCommand extends ChangeMoneySubCommand {
     }
 
     @Override
-    protected void executeChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
-        if (instance.getEconomyHandler().withdraw(offlinePlayer.getUniqueId(), amount)) {
-            MessageUtils.sendMessage(sender,
-                    instance.getMessageConfig().getGiveSuccess()
-                            .replace("{balance}", Double.toString(amount))
-                            .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
-            );
-        } else {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getCannotDo());
-        }
+    protected boolean tryChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
+        return instance.getEconomyHandler().withdraw(offlinePlayer.getUniqueId(), amount);
+    }
+
+    @Override
+    protected void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
+        MessageUtils.sendMessage(sender,
+                instance.getMessageConfig().getTakeSuccess()
+                        .replace("{balance}", Double.toString(amount))
+                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+        );
+    }
+
+    @Override
+    protected void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
+        MessageUtils.sendMessage(sender,
+                instance.getMessageConfig().getTakeFail()
+                        .replace("{balance}", Double.toString(amount))
+                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+        );
     }
 }

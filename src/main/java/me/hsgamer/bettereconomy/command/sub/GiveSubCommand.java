@@ -13,10 +13,23 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
     }
 
     @Override
-    protected void executeChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
-        instance.getEconomyHandler().deposit(offlinePlayer.getUniqueId(), amount);
+    protected boolean tryChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
+        return instance.getEconomyHandler().deposit(offlinePlayer.getUniqueId(), amount);
+    }
+
+    @Override
+    protected void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
+                        .replace("{balance}", Double.toString(amount))
+                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+        );
+    }
+
+    @Override
+    protected void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
+        MessageUtils.sendMessage(sender,
+                instance.getMessageConfig().getGiveFail()
                         .replace("{balance}", Double.toString(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
