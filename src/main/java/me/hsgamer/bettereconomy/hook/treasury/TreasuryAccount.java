@@ -12,7 +12,6 @@ import me.lokka30.treasury.api.economy.transaction.EconomyTransactionInitiator;
 import me.lokka30.treasury.api.economy.transaction.EconomyTransactionType;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.time.temporal.Temporal;
@@ -38,11 +37,6 @@ public class TreasuryAccount implements PlayerAccount {
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(Bukkit.getOfflinePlayer(uuid).getName());
-    }
-
-    @Override
-    public void setName(@Nullable String name, @NotNull EconomySubscriber<Boolean> subscription) {
-        subscription.succeed(false);
     }
 
     @Override
