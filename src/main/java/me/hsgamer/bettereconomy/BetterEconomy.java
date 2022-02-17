@@ -19,6 +19,7 @@ import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.lokka30.treasury.api.common.service.ServiceRegistry;
 import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -44,9 +45,19 @@ public final class BetterEconomy extends BasePlugin {
 
         String hookType = mainConfig.getHookType();
         if (hookType.equalsIgnoreCase("vault") && getServer().getPluginManager().getPlugin("Vault") != null) {
-            getServer().getServicesManager().register(Economy.class, new VaultEconomyHook(this), this, ServicePriority.Normal);
+            getServer().getServicesManager().register(
+                    Economy.class,
+                    new VaultEconomyHook(this),
+                    this,
+                    ServicePriority.Normal
+            );
         } else if (hookType.equalsIgnoreCase("treasury") && getServer().getPluginManager().getPlugin("Treasury") != null) {
-            getServer().getServicesManager().register(EconomyProvider.class, new TreasuryEconomyHook(this), this, ServicePriority.Normal);
+            ServiceRegistry.INSTANCE.registerService(
+                    EconomyProvider.class,
+                    new TreasuryEconomyHook(this),
+                    getName(),
+                    me.lokka30.treasury.api.common.service.ServicePriority.NORMAL
+            );
         }
 
         ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");

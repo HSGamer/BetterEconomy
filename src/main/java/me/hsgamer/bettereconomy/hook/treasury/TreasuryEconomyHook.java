@@ -7,7 +7,6 @@ import me.lokka30.treasury.api.economy.EconomyProvider;
 import me.lokka30.treasury.api.economy.account.Account;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
 import me.lokka30.treasury.api.economy.currency.Currency;
-import me.lokka30.treasury.api.economy.misc.EconomyAPIVersion;
 import me.lokka30.treasury.api.economy.misc.OptionalEconomyApiFeature;
 import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
@@ -26,11 +25,6 @@ public class TreasuryEconomyHook implements EconomyProvider {
     public TreasuryEconomyHook(BetterEconomy instance) {
         this.instance = instance;
         this.currency = new TreasuryCurrency(instance);
-    }
-
-    @Override
-    public @NotNull EconomyAPIVersion getSupportedAPIVersion() {
-        return EconomyAPIVersion.v1_0;
     }
 
     @Override
