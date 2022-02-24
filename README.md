@@ -1,16 +1,16 @@
 # BetterEconomy
-A simple Vault-based economy plugin
+A simple economy plugin
 
 ## Commands & Permissions
-| Command | Permission |
-| --- | --- |
-| `/eco give <player> <amount>` | bettereconomy.set |
-| `/eco take <player> <amount>` | bettereconomy.set |
-| `/eco set <player> <amount>` | bettereconomy.set |
-| `/eco reload` | bettereconomy.reload |
-| `/balance` | bettereconomy.balance<br>bettereconomy.balance.others |
-| `/baltop`| bettereconomy.balancetop |
-| `/pay <player> <amount>` | bettereconomy.pay |
+| Command                       | Permission                                            |
+|-------------------------------|-------------------------------------------------------|
+| `/eco give <player> <amount>` | bettereconomy.set                                     |
+| `/eco take <player> <amount>` | bettereconomy.set                                     |
+| `/eco set <player> <amount>`  | bettereconomy.set                                     |
+| `/eco reload`                 | bettereconomy.reload                                  |
+| `/balance`                    | bettereconomy.balance<br>bettereconomy.balance.others |
+| `/baltop`                     | bettereconomy.balancetop                              |
+| `/pay <player> <amount>`      | bettereconomy.pay                                     |
 
 ## Config
 ```yaml
@@ -18,9 +18,8 @@ A simple Vault-based economy plugin
 # Allow: file, mysql, sqlite, json
 handler-type: file
 
-# The type of the hook. Used to hook an economy core
-# Allow: VAULT, TREASURY, NONE
-hook-type: VAULT
+# Enable if the plugin should hook to other economy cores (Vault, Treasury, etc)
+hook-enabled: true
 
 # Settings on formatting the balance
 currency:
