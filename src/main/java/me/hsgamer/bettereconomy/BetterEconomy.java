@@ -43,21 +43,22 @@ public final class BetterEconomy extends BasePlugin {
         mainConfig.setup();
         messageConfig.setup();
 
-        String hookType = mainConfig.getHookType();
-        if (hookType.equalsIgnoreCase("vault") && getServer().getPluginManager().getPlugin("Vault") != null) {
-            getServer().getServicesManager().register(
-                    Economy.class,
-                    new VaultEconomyHook(this),
-                    this,
-                    ServicePriority.Normal
-            );
-        } else if (hookType.equalsIgnoreCase("treasury") && getServer().getPluginManager().getPlugin("Treasury") != null) {
-            ServiceRegistry.INSTANCE.registerService(
-                    EconomyProvider.class,
-                    new TreasuryEconomyHook(this),
-                    getName(),
-                    me.lokka30.treasury.api.common.service.ServicePriority.NORMAL
-            );
+        if (mainConfig.isHookEnabled()) {
+            if (getServer().getPluginManager().getPlugin("Vault") != null) {
+                getServer().getServicesManager().register(
+                        Economy.class,
+                        new VaultEconomyHook(this),
+                        this,
+                        ServicePriority.Normal
+                );
+            } else if (getServer().getPluginManager().getPlugin("Treasury") != null) {
+                ServiceRegistry.INSTANCE.registerService(
+                        EconomyProvider.class,
+                        new TreasuryEconomyHook(this),
+                        getName(),
+                        me.lokka30.treasury.api.common.service.ServicePriority.NORMAL
+                );
+            }
         }
 
         ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");

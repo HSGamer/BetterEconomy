@@ -16,8 +16,8 @@ public class MainConfig extends AnnotatedConfig {
     boolean metrics = true;
     private @ConfigPath("handler-type")
     String handlerType = "file";
-    private @ConfigPath("hook-type")
-    String hookType = "VAULT";
+    private @ConfigPath("hook-enabled")
+    boolean hookEnabled = true;
     private @ConfigPath("currency.singular")
     String currencySingular = "$";
     private @ConfigPath("currency.plural")
