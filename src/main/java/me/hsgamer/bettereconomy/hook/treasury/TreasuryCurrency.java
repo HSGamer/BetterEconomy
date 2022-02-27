@@ -1,7 +1,6 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
-import me.hsgamer.bettereconomy.Utils;
 import me.lokka30.treasury.api.economy.currency.Currency;
 import me.lokka30.treasury.api.economy.response.EconomyException;
 import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
@@ -32,8 +31,7 @@ public class TreasuryCurrency implements Currency {
 
     @Override
     public char getDecimal() {
-        String symbol = getSymbol();
-        return symbol.isEmpty() ? '$' : symbol.charAt(0);
+        return instance.getMainConfig().getDecimalPoint();
     }
 
     @Override
@@ -73,12 +71,12 @@ public class TreasuryCurrency implements Currency {
                 continue;
             }
 
-            if (!Character.isDigit(c) && !Utils.isSeparator(c)) {
+            if (!Character.isDigit(c) && !isSeparator(c)) {
                 currencyBuilder.append(c);
             } else if (Character.isDigit(c)) {
                 valueBuilder.append(c);
-            } else if (Utils.isSeparator(c)) {
-                if (c == '.') {
+            } else if (isSeparator(c)) {
+                if (c == getDecimal()) {
                     boolean nowChanged = false;
                     if (!hadDot) {
                         hadDot = true;
@@ -90,7 +88,7 @@ public class TreasuryCurrency implements Currency {
                         break;
                     }
                 }
-                valueBuilder.append(c);
+                valueBuilder.append('.');
             }
         }
 
@@ -131,6 +129,10 @@ public class TreasuryCurrency implements Currency {
                     || currency.equalsIgnoreCase(getDisplayNameSingular())
                     || currency.equalsIgnoreCase(getDisplayNamePlural());
         }
+    }
+
+    private boolean isSeparator(char c) {
+        return c == getDecimal() || c == instance.getMainConfig().getThousandsSeparator();
     }
 
     @Override

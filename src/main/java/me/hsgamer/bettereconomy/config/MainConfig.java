@@ -8,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 @Getter
 @SuppressWarnings("all")
@@ -26,6 +28,12 @@ public class MainConfig extends AnnotatedConfig {
     String currencySymbol = "$";
     private @ConfigPath("currency.format-fractional-digits")
     int fractionalDigits = 2;
+    private @ConfigPath("currency.decimal-point")
+    String decimalPoint = ".";
+    private @ConfigPath("currency.use-thousands-separator")
+    boolean useThousandsSeparator = true;
+    private @ConfigPath("currency.thousands-separator")
+    String thousandsSeparator = ",";
     private @ConfigPath("balance.top-update-period")
     long updateBalanceTopPeriod = 100;
     private @ConfigPath("balance.file-save-period")
@@ -60,6 +68,27 @@ public class MainConfig extends AnnotatedConfig {
     }
 
     public String format(BigDecimal amount, int scale) {
-        return amount.setScale(scale, RoundingMode.HALF_EVEN).toPlainString();
+        DecimalFormat format = new DecimalFormat();
+        format.setRoundingMode(RoundingMode.HALF_EVEN);
+        format.setGroupingUsed(useThousandsSeparator);
+        format.setMinimumFractionDigits(0);
+        format.setMaximumFractionDigits(scale);
+        format.setDecimalFormatSymbols(new DecimalFormatSymbols() {
+            {
+                setDecimalSeparator(getDecimalPoint());
+                setGroupingSeparator(getThousandsSeparator());
+            }
+        });
+        return format.format(amount);
+    }
+
+    public char getDecimalPoint() {
+        String point = decimalPoint.trim();
+        return point.isEmpty() ? '.' : point.charAt(0);
+    }
+
+    public char getThousandsSeparator() {
+        String separator = thousandsSeparator.trim();
+        return separator.isEmpty() ? ' ' : separator.charAt(0);
     }
 }

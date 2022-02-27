@@ -21,8 +21,4 @@ public final class Utils {
     public static void scheduleAsync(Runnable runnable) {
         Bukkit.getScheduler().runTaskAsynchronously(JavaPlugin.getProvidingPlugin(Utils.class), runnable);
     }
-
-    public static boolean isSeparator(char c) {
-        return c == '.' || c == ',' || c == '\'';
-    }
 }
