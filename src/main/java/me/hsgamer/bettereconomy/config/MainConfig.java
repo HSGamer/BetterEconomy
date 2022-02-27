@@ -89,6 +89,6 @@ public class MainConfig extends AnnotatedConfig {
 
     public char getThousandsSeparator() {
         String separator = thousandsSeparator.trim();
-        return separator.isEmpty() ? ' ' : separator.charAt(0);
+        return separator.isEmpty() ? ',' : separator.charAt(0);
     }
 }
