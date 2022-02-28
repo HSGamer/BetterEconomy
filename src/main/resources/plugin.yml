@@ -8,4 +8,4 @@ softdepend:
 authors:
   - HSGamer
   - takahatashun
-description: A simple Vault-based Economy plugin
+description: ${project.description}
