@@ -14,7 +14,7 @@
     <description>A simple Vault-based Economy plugin</description>
     <properties>
         <java.version>1.8</java.version>
-        <core.version>3.19</core.version>
+        <core.version>4.0.0-SNAPSHOT</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -134,58 +134,49 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-common</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-common</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-baseplugin</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-baseplugin</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-subcommand</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-subcommand</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-utils</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-utils</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-bukkit-config</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-config</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-config-annotated</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-config-proxy</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-builder</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-builder</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-database-client-java</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-database-client-java</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-database-driver-mysql</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-database-driver-mysql</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.protobuf</groupId>
@@ -198,10 +189,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>me.HSGamer</groupId>
-            <artifactId>HSCore-database-driver-sqlite</artifactId>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-database-driver-sqlite</artifactId>
             <version>${core.version}</version>
-            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <groupId>org.xerial</groupId>

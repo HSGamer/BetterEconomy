@@ -31,7 +31,7 @@ public class TreasuryCurrency implements Currency {
 
     @Override
     public char getDecimal() {
-        return instance.getMainConfig().getDecimalPoint();
+        return instance.getMainConfig().getActualDecimalPoint();
     }
 
     @Override
@@ -132,7 +132,7 @@ public class TreasuryCurrency implements Currency {
     }
 
     private boolean isSeparator(char c) {
-        return c == getDecimal() || c == instance.getMainConfig().getThousandsSeparator();
+        return c == getDecimal() || c == instance.getMainConfig().getActualThousandsSeparator();
     }
 
     @Override

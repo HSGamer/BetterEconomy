@@ -18,39 +18,30 @@ import me.hsgamer.bettereconomy.listener.JoinListener;
 import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.lokka30.treasury.api.common.service.ServiceRegistry;
 import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.plugin.ServicePriority;
 
+@Getter
 public final class BetterEconomy extends BasePlugin {
     public static final Builder<BetterEconomy, EconomyHandler> ECONOMY_HANDLER_BUILDER = new Builder<>();
 
-    @Getter
-    private final MainConfig mainConfig = new MainConfig(this);
-    @Getter
-    private final MessageConfig messageConfig = new MessageConfig(this);
-    @Getter
+    private final MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this, "config.yml"));
+    private final MessageConfig messageConfig = ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml"));
     private final TopRunnable topRunnable = new TopRunnable(this);
-    @Getter
     private EconomyHandler economyHandler;
 
     @Override
     public void load() {
         MessageUtils.setPrefix(messageConfig::getPrefix);
-        mainConfig.setup();
-        messageConfig.setup();
 
         if (mainConfig.isHookEnabled()) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {
-                getServer().getServicesManager().register(
-                        Economy.class,
-                        new VaultEconomyHook(this),
-                        this,
-                        ServicePriority.Normal
-                );
+                registerProvider(Economy.class, new VaultEconomyHook(this));
             } else if (getServer().getPluginManager().getPlugin("Treasury") != null) {
                 ServiceRegistry.INSTANCE.registerService(
                         EconomyProvider.class,

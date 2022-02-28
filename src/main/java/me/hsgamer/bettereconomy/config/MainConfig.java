@@ -1,94 +1,139 @@
 package me.hsgamer.bettereconomy.config;
 
-import lombok.Getter;
-import me.hsgamer.hscore.bukkit.config.BukkitConfig;
-import me.hsgamer.hscore.config.AnnotatedConfig;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
-import org.bukkit.plugin.Plugin;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
-@Getter
-@SuppressWarnings("all")
-public class MainConfig extends AnnotatedConfig {
-    private @ConfigPath("metrics")
-    boolean metrics = true;
-    private @ConfigPath("handler-type")
-    String handlerType = "file";
-    private @ConfigPath("hook-enabled")
-    boolean hookEnabled = true;
-    private @ConfigPath("currency.singular")
-    String currencySingular = "$";
-    private @ConfigPath("currency.plural")
-    String currencyPlural = "$";
-    private @ConfigPath("currency.symbol")
-    String currencySymbol = "$";
-    private @ConfigPath("currency.format-fractional-digits")
-    int fractionalDigits = 2;
-    private @ConfigPath("currency.decimal-point")
-    String decimalPoint = ".";
-    private @ConfigPath("currency.use-thousands-separator")
-    boolean useThousandsSeparator = true;
-    private @ConfigPath("currency.thousands-separator")
-    String thousandsSeparator = ",";
-    private @ConfigPath("balance.top-update-period")
-    long updateBalanceTopPeriod = 100;
-    private @ConfigPath("balance.file-save-period")
-    long saveFilePeriod = 200;
-    private @ConfigPath("balance.start-amount")
-    double startAmount = 0;
-
-    private @ConfigPath("database.mysql.host")
-    String mysqlHost = "localhost";
-    private @ConfigPath("database.mysql.port")
-    String mysqlPort = "3306";
-    private @ConfigPath("database.mysql.dbname")
-    String mysqlDatabaseName = "";
-    private @ConfigPath("database.mysql.username")
-    String mysqlUsername = "root";
-    private @ConfigPath("database.mysql.password")
-    String mysqlPassword = "";
-
-    private @ConfigPath("database.sqlite.dbname")
-    String sqliteDatabaseName = "balances";
-
-    public MainConfig(Plugin plugin) {
-        super(new BukkitConfig(plugin, "config.yml"));
+public interface MainConfig {
+    @ConfigPath("metrics")
+    default boolean isMetrics() {
+        return true;
     }
 
-    public String format(double amount) {
-        return format(BigDecimal.valueOf(amount), fractionalDigits);
+    @ConfigPath("handler-type")
+    default String getHandlerType() {
+        return "file";
     }
 
-    public String format(BigDecimal amount) {
-        return format(amount, fractionalDigits);
+    @ConfigPath("hook-enabled")
+    default boolean isHookEnabled() {
+        return true;
     }
 
-    public String format(BigDecimal amount, int scale) {
+    @ConfigPath("currency.singular")
+    default String getCurrencySingular() {
+        return "$";
+    }
+
+    @ConfigPath("currency.plural")
+    default String getCurrencyPlural() {
+        return "$";
+    }
+
+    @ConfigPath("currency.symbol")
+    default String getCurrencySymbol() {
+        return "$";
+    }
+
+    @ConfigPath("currency.format-fractional-digits")
+    default int getFractionalDigits() {
+        return 2;
+    }
+
+    @ConfigPath("currency.decimal-point")
+    default String getDecimalPoint() {
+        return ".";
+    }
+
+    @ConfigPath("currency.use-thousands-separator")
+    default boolean isUseThousandsSeparator() {
+        return true;
+    }
+
+    @ConfigPath("currency.thousands-separator")
+    default String getThousandsSeparator() {
+        return ",";
+    }
+
+    @ConfigPath("balance.top-update-period")
+    default long getUpdateBalanceTopPeriod() {
+        return 100;
+    }
+
+    @ConfigPath("balance.file-save-period")
+    default long getSaveFilePeriod() {
+        return 200;
+    }
+
+    @ConfigPath("balance.start-amount")
+    default double getStartAmount() {
+        return 0;
+    }
+
+    @ConfigPath("database.mysql.host")
+    default String getMysqlHost() {
+        return "localhost";
+    }
+
+    @ConfigPath("database.mysql.port")
+    default String getMysqlPort() {
+        return "3306";
+    }
+
+    @ConfigPath("database.mysql.dbname")
+    default String getMysqlDatabaseName() {
+        return "";
+    }
+
+    @ConfigPath("database.mysql.username")
+    default String getMysqlUsername() {
+        return "root";
+    }
+
+    @ConfigPath("database.mysql.password")
+    default String getMysqlPassword() {
+        return "";
+    }
+
+    @ConfigPath("database.sqlite.dbname")
+    default String getSqliteDatabaseName() {
+        return "balances";
+    }
+
+    void reloadConfig();
+
+    default String format(double amount) {
+        return format(BigDecimal.valueOf(amount), getFractionalDigits());
+    }
+
+    default String format(BigDecimal amount) {
+        return format(amount, getFractionalDigits());
+    }
+
+    default String format(BigDecimal amount, int scale) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(getActualDecimalPoint());
+        symbols.setGroupingSeparator(getActualThousandsSeparator());
+
         DecimalFormat format = new DecimalFormat();
         format.setRoundingMode(RoundingMode.HALF_EVEN);
-        format.setGroupingUsed(useThousandsSeparator);
+        format.setGroupingUsed(isUseThousandsSeparator());
         format.setMinimumFractionDigits(0);
         format.setMaximumFractionDigits(scale);
-        format.setDecimalFormatSymbols(new DecimalFormatSymbols() {
-            {
-                setDecimalSeparator(getDecimalPoint());
-                setGroupingSeparator(getThousandsSeparator());
-            }
-        });
+        format.setDecimalFormatSymbols(symbols);
         return format.format(amount);
     }
 
-    public char getDecimalPoint() {
-        String point = decimalPoint.trim();
+    default char getActualDecimalPoint() {
+        String point = getDecimalPoint().trim();
         return point.isEmpty() ? '.' : point.charAt(0);
     }
 
-    public char getThousandsSeparator() {
-        String separator = thousandsSeparator.trim();
+    default char getActualThousandsSeparator() {
+        String separator = getThousandsSeparator().trim();
         return separator.isEmpty() ? ',' : separator.charAt(0);
     }
 }

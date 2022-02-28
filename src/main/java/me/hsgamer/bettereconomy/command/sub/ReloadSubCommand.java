@@ -20,8 +20,8 @@ public class ReloadSubCommand extends SubCommand {
 
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        instance.getMainConfig().reload();
-        instance.getMessageConfig().reload();
+        instance.getMainConfig().reloadConfig();
+        instance.getMessageConfig().reloadConfig();
         MessageUtils.sendMessage(sender, instance.getMessageConfig().getSuccess());
     }
 
