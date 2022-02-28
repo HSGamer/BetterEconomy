@@ -84,8 +84,4 @@ public interface MessageConfig {
     }
 
     void reloadConfig();
-
-//    public MessageConfig(Plugin plugin) {
-//        super(new BukkitConfig(plugin, "messages.yml"));
-//    }
 }
