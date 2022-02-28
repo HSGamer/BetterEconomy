@@ -59,12 +59,12 @@ public interface MainConfig {
     }
 
     @ConfigPath("balance.top-update-period")
-    default long getUpdateBalanceTopPeriod() {
+    default int getUpdateBalanceTopPeriod() {
         return 100;
     }
 
     @ConfigPath("balance.file-save-period")
-    default long getSaveFilePeriod() {
+    default int getSaveFilePeriod() {
         return 200;
     }
 
