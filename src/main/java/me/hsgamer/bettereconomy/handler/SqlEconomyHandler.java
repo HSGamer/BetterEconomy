@@ -4,6 +4,7 @@ import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
 import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
+import me.hsgamer.hscore.database.client.sql.SqlClient;
 import me.hsgamer.hscore.database.client.sql.StatementBuilder;
 import me.hsgamer.hscore.database.client.sql.java.JavaSqlClient;
 
@@ -11,28 +12,43 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 
 public abstract class SqlEconomyHandler extends EconomyHandler {
 
-    private final Connection connection;
+    private final SqlClient<?> client;
+    private final AtomicReference<Connection> connectionReference = new AtomicReference<>();
 
     SqlEconomyHandler(BetterEconomy instance, Setting setting, Driver driver) {
         super(instance);
         try {
-            JavaSqlClient client = new JavaSqlClient(setting, driver);
-            connection = client.getConnection();
+            client = new JavaSqlClient(setting, driver);
+            connectionReference.set(client.getConnection());
         } catch (SQLException e) {
             throw new IllegalStateException("constructor()#connection", e);
         }
-        StatementBuilder.create(connection)
+        StatementBuilder.create(getConnection())
                 .setStatement("CREATE TABLE IF NOT EXISTS `economy` (`uuid` varchar(36) NOT NULL UNIQUE, `balance` double DEFAULT 0);")
                 .updateSafe();
     }
 
+    private Connection getConnection() {
+        Connection connection = this.connectionReference.get();
+        try {
+            if (connection == null || connection.isClosed()) {
+                connection = client.getConnection();
+                this.connectionReference.set(connection);
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("getConnection()", e);
+        }
+        return connection;
+    }
+
     @Override
     public boolean hasAccount(UUID uuid) {
-        return StatementBuilder.create(connection)
+        return StatementBuilder.create(getConnection())
                 .setStatement("SELECT * FROM `economy` WHERE `uuid` = ?")
                 .addValues(uuid.toString())
                 .querySafe(ResultSet::next)
@@ -41,7 +57,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
 
     @Override
     public double get(UUID uuid) {
-        return StatementBuilder.create(connection)
+        return StatementBuilder.create(getConnection())
                 .setStatement("SELECT `balance` FROM `economy` WHERE `uuid` = ?")
                 .addValues(uuid.toString())
                 .querySafe(resultSet -> resultSet.next() ? resultSet.getDouble("balance") : 0.0)
@@ -53,7 +69,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
         if (amount < 0) {
             return false;
         } else {
-            return StatementBuilder.create(connection)
+            return StatementBuilder.create(getConnection())
                     .setStatement("UPDATE `economy` SET `balance`= ? WHERE `uuid`= ?")
                     .addValues(amount, uuid.toString())
                     .updateSafe() > 0;
@@ -65,7 +81,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
         if (hasAccount(uuid)) {
             return false;
         } else {
-            return StatementBuilder.create(connection)
+            return StatementBuilder.create(getConnection())
                     .setStatement("INSERT INTO `economy` (`uuid`, `balance`) VALUES ( ? , ? )")
                     .addValues(uuid.toString(), startAmount)
                     .updateSafe() > 0;
@@ -75,7 +91,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     @Override
     public void disable() {
         try {
-            connection.close();
+            getConnection().close();
         } catch (SQLException e) {
             instance.getLogger().log(Level.SEVERE, "disable()", e);
         }
