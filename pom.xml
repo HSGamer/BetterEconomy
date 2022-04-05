@@ -14,7 +14,7 @@
     <description>A simple Economy plugin</description>
     <properties>
         <java.version>1.8</java.version>
-        <core.version>4.0.0-SNAPSHOT</core.version>
+        <core.version>4.0.2</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -145,7 +145,7 @@
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>hscore-bukkit-subcommand</artifactId>
+            <artifactId>hscore-bukkit-command-sub</artifactId>
             <version>${core.version}</version>
         </dependency>
         <dependency>

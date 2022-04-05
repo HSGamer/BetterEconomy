@@ -2,7 +2,7 @@ package me.hsgamer.bettereconomy.command.sub;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
-import me.hsgamer.hscore.bukkit.subcommand.SubCommand;
+import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;

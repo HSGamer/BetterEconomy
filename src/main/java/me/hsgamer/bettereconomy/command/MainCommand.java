@@ -6,7 +6,7 @@ import me.hsgamer.bettereconomy.command.sub.GiveSubCommand;
 import me.hsgamer.bettereconomy.command.sub.ReloadSubCommand;
 import me.hsgamer.bettereconomy.command.sub.SetSubCommand;
 import me.hsgamer.bettereconomy.command.sub.TakeSubCommand;
-import me.hsgamer.hscore.bukkit.subcommand.SubCommandManager;
+import me.hsgamer.hscore.bukkit.command.sub.SubCommandManager;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
