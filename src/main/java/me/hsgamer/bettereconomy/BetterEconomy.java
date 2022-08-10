@@ -82,7 +82,7 @@ public final class BetterEconomy extends BasePlugin {
 
     @Override
     public void disable() {
-        ECONOMY_HANDLER_BUILDER.unregisterAll();
+        ECONOMY_HANDLER_BUILDER.clear();
     }
 
     @Override
