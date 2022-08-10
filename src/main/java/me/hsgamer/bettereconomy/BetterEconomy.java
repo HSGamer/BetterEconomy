@@ -43,7 +43,8 @@ public final class BetterEconomy extends BasePlugin {
         if (mainConfig.isHookEnabled()) {
             if (getServer().getPluginManager().getPlugin("Vault") != null) {
                 registerProvider(Economy.class, new VaultEconomyHook(this), ServicePriority.High);
-            } else if (getServer().getPluginManager().getPlugin("Treasury") != null) {
+            }
+            if (getServer().getPluginManager().getPlugin("Treasury") != null) {
                 ServiceRegistry.INSTANCE.registerService(
                         EconomyProvider.class,
                         new TreasuryEconomyHook(this),
