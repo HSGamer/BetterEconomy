@@ -44,7 +44,7 @@ public class TreasuryAccount implements PlayerAccount {
         if (!currency.getIdentifier().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
             subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
         } else {
-            Utils.schedule(() -> {
+            Utils.scheduleAsync(() -> {
                 double amount = instance.getEconomyHandler().get(uuid);
                 subscription.succeed(BigDecimal.valueOf(amount));
             });
@@ -56,7 +56,7 @@ public class TreasuryAccount implements PlayerAccount {
         if (!currency.getIdentifier().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
             subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
         } else {
-            Utils.schedule(() -> {
+            Utils.scheduleAsync(() -> {
                 double amountDouble = amount.doubleValue();
                 boolean status = instance.getEconomyHandler().set(uuid, amountDouble);
                 if (!status) {
@@ -70,7 +70,7 @@ public class TreasuryAccount implements PlayerAccount {
 
     @Override
     public void doTransaction(@NotNull EconomyTransaction economyTransaction, EconomySubscriber<BigDecimal> subscription) {
-        Utils.schedule(() -> {
+        Utils.scheduleAsync(() -> {
             if (!economyTransaction.getCurrencyID().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
                 subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
                 return;
@@ -99,7 +99,7 @@ public class TreasuryAccount implements PlayerAccount {
 
     @Override
     public void deleteAccount(@NotNull EconomySubscriber<Boolean> subscription) {
-        Utils.schedule(() -> {
+        Utils.scheduleAsync(() -> {
             boolean status = instance.getEconomyHandler().deleteAccount(uuid);
             subscription.succeed(status);
         });

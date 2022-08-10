@@ -34,7 +34,7 @@ public class TreasuryEconomyHook implements EconomyProvider {
 
     @Override
     public void hasPlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<Boolean> subscription) {
-        Utils.schedule(() -> {
+        Utils.scheduleAsync(() -> {
             boolean status = instance.getEconomyHandler().hasAccount(accountId);
             subscription.succeed(status);
         });
@@ -42,7 +42,7 @@ public class TreasuryEconomyHook implements EconomyProvider {
 
     @Override
     public void retrievePlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<PlayerAccount> subscription) {
-        Utils.schedule(() -> {
+        Utils.scheduleAsync(() -> {
             if (instance.getEconomyHandler().hasAccount(accountId)) {
                 subscription.succeed(new TreasuryAccount(instance, accountId));
             } else {
@@ -53,7 +53,7 @@ public class TreasuryEconomyHook implements EconomyProvider {
 
     @Override
     public void createPlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<PlayerAccount> subscription) {
-        Utils.schedule(() -> {
+        Utils.scheduleAsync(() -> {
             instance.getEconomyHandler().createAccount(accountId);
             subscription.succeed(new TreasuryAccount(instance, accountId));
         });
