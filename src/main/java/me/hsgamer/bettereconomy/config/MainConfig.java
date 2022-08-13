@@ -1,11 +1,14 @@
 package me.hsgamer.bettereconomy.config;
 
+import me.hsgamer.bettereconomy.config.converter.StringObjectMapConverter;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Collections;
+import java.util.Map;
 
 public interface MainConfig {
     @ConfigPath("metrics")
@@ -101,6 +104,16 @@ public interface MainConfig {
     @ConfigPath("database.sqlite.dbname")
     default String getSqliteDatabaseName() {
         return "balances";
+    }
+
+    @ConfigPath(value = "database.common.client-settings", converter = StringObjectMapConverter.class)
+    default Map<String, Object> getDatabaseClientSettings() {
+        return Collections.emptyMap();
+    }
+
+    @ConfigPath(value = "database.common.driver-settings", converter = StringObjectMapConverter.class)
+    default Map<String, Object> getDatabaseDriverSettings() {
+        return Collections.emptyMap();
     }
 
     void reloadConfig();

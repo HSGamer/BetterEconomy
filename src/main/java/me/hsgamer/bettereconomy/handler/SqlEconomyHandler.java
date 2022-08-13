@@ -22,6 +22,11 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
 
     SqlEconomyHandler(BetterEconomy instance, Setting setting, Driver driver) {
         super(instance);
+
+        setting
+                .setClientProperties(instance.getMainConfig().getDatabaseClientSettings())
+                .setDriverProperties(instance.getMainConfig().getDatabaseDriverSettings());
+
         try {
             client = new JavaSqlClient(setting, driver);
             connectionReference.set(client.getConnection());
