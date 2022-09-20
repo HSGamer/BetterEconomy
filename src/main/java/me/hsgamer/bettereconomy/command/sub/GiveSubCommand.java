@@ -7,9 +7,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Optional;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
+import me.hsgamer.bettereconomy.config.MessageConfig;
 
 public class GiveSubCommand extends ChangeMoneySubCommand {
     public GiveSubCommand(BetterEconomy instance) {
