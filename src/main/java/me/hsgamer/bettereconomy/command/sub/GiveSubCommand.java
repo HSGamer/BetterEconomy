@@ -21,7 +21,7 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
     protected void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
@@ -30,7 +30,7 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
     protected void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveFail()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
