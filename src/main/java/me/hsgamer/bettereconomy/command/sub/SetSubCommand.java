@@ -5,6 +5,8 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import me.hsgamer.bettereconomy.config.MessageConfig;
+
 import java.util.Optional;
 
 public class SetSubCommand extends ChangeMoneySubCommand {
@@ -21,7 +23,7 @@ public class SetSubCommand extends ChangeMoneySubCommand {
     protected void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getSetSuccess()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
@@ -30,7 +32,7 @@ public class SetSubCommand extends ChangeMoneySubCommand {
     protected void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getSetFail()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
