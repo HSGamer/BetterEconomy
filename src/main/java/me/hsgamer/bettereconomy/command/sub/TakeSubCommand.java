@@ -7,8 +7,6 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Optional;
 
-import me.hsgamer.bettereconomy.config.MessageConfig;
-
 public class TakeSubCommand extends ChangeMoneySubCommand {
     public TakeSubCommand(BetterEconomy instance) {
         super(instance, "take", "Take money from the player", "/eco take <player> <amount>");
