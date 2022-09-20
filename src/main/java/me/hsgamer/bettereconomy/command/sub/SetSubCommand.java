@@ -5,8 +5,6 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-import me.hsgamer.bettereconomy.config.MessageConfig;
-
 import java.util.Optional;
 
 public class SetSubCommand extends ChangeMoneySubCommand {
