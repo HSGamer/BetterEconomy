@@ -7,6 +7,10 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Optional;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 public class GiveSubCommand extends ChangeMoneySubCommand {
     public GiveSubCommand(BetterEconomy instance) {
         super(instance, "give", "Give money to the player", "/eco give <player> <amount>");
@@ -21,7 +25,7 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
     protected void sendSuccessMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", new DecimalFormat("#,###.##", new DecimalFormatSymbols(Locale.GERMAN)).format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
@@ -30,7 +34,7 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
     protected void sendFailMessage(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveFail()
-                        .replace("{balance}", Double.toString(amount))
+                        .replace("{balance}", new DecimalFormat("#,###.##", new DecimalFormatSymbols(Locale.GERMAN)).format(amount))
                         .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
         );
     }
