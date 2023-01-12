@@ -1,6 +1,5 @@
 package me.hsgamer.bettereconomy.config;
 
-import me.hsgamer.bettereconomy.config.converter.StringObjectMapConverter;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 
 import java.math.BigDecimal;
@@ -106,12 +105,12 @@ public interface MainConfig {
         return "balances";
     }
 
-    @ConfigPath(value = "database.common.client-settings", converter = StringObjectMapConverter.class)
+    @ConfigPath(value = "database.common.client-settings")
     default Map<String, Object> getDatabaseClientSettings() {
         return Collections.emptyMap();
     }
 
-    @ConfigPath(value = "database.common.driver-settings", converter = StringObjectMapConverter.class)
+    @ConfigPath(value = "database.common.driver-settings")
     default Map<String, Object> getDatabaseDriverSettings() {
         return Collections.emptyMap();
     }

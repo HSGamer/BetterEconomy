@@ -1,5 +1,6 @@
 package me.hsgamer.bettereconomy;
 
+import com.google.common.reflect.TypeToken;
 import lombok.Getter;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
 import me.hsgamer.bettereconomy.command.BalanceCommand;
@@ -8,6 +9,7 @@ import me.hsgamer.bettereconomy.command.MainCommand;
 import me.hsgamer.bettereconomy.command.PayCommand;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
+import me.hsgamer.bettereconomy.config.converter.StringObjectMapConverter;
 import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
 import me.hsgamer.bettereconomy.handler.JsonEconomyHandler;
 import me.hsgamer.bettereconomy.handler.MySqlEconomyHandler;
@@ -20,6 +22,7 @@ import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.lokka30.treasury.api.common.service.ServiceRegistry;
 import me.lokka30.treasury.api.economy.EconomyProvider;
@@ -27,9 +30,16 @@ import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.ServicePriority;
 
+import java.util.Map;
+
 @Getter
 public final class BetterEconomy extends BasePlugin {
     public static final Builder<BetterEconomy, EconomyHandler> ECONOMY_HANDLER_BUILDER = new Builder<>();
+
+    static {
+        DefaultConverterManager.registerConverter(new TypeToken<Map<String, Object>>() {
+        }.getType(), new StringObjectMapConverter());
+    }
 
     private final MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this, "config.yml"));
     private final MessageConfig messageConfig = ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml"));
