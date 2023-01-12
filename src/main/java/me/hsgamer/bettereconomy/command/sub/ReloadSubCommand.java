@@ -14,7 +14,7 @@ public class ReloadSubCommand extends SubCommand {
     private final BetterEconomy instance;
 
     public ReloadSubCommand(BetterEconomy instance) {
-        super("reload", "Reload the plugin", "/eco reload", Permissions.RELOAD.getName(), true);
+        super("reload", "Reload the plugin", "/<label> reload", Permissions.RELOAD.getName(), true);
         this.instance = instance;
     }
 

@@ -25,7 +25,7 @@ public class MainCommand extends Command {
             @Override
             public void sendHelpMessage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
                 if (sender.hasPermission(Permissions.ADMIN)) {
-                    subcommands.forEach((subLabel, subCommand) -> MessageUtils.sendMessage(sender, formatCommand(label + " " + subLabel, subCommand.getDescription())));
+                    subcommands.values().forEach(subCommand -> MessageUtils.sendMessage(sender, formatCommand(subCommand.getUsage().replace("<label>", label), subCommand.getDescription())));
                 }
                 MessageUtils.sendMessage(sender, formatCommand("balancetop", "Show the balance top"));
                 MessageUtils.sendMessage(sender, formatCommand("balance", "Get the balance of a player"));

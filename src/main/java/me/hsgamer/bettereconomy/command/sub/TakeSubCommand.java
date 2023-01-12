@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class TakeSubCommand extends ChangeMoneySubCommand {
     public TakeSubCommand(BetterEconomy instance) {
-        super(instance, "take", "Take money from the player", "/eco take <player> <amount>");
+        super(instance, "take", "Take money from the player", "/<label> take <player> <amount>");
     }
 
     @Override
