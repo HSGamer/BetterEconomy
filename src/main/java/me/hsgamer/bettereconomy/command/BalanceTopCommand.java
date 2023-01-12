@@ -18,7 +18,7 @@ public class BalanceTopCommand extends Command {
     private final BetterEconomy instance;
 
     public BalanceTopCommand(BetterEconomy instance) {
-        super("balancetop", "Show the balance top", "/balancetop [page]", Collections.singletonList("baltop"));
+        super("balancetop", "Show the balance top", "/balancetop [page]", Collections.singletonList("baltop", "topsaldo", "topcoins"));
         this.instance = instance;
         setPermission(Permissions.BALANCE_TOP.getName());
     }
