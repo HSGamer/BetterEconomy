@@ -27,12 +27,12 @@ public class MainCommand extends Command {
                 if (sender.hasPermission(Permissions.ADMIN)) {
                     subcommands.values().forEach(subCommand -> MessageUtils.sendMessage(sender, formatCommand(subCommand.getUsage().replace("<label>", label), subCommand.getDescription())));
                 }
-                MessageUtils.sendMessage(sender, formatCommand("balancetop", "Show the balance top"));
-                MessageUtils.sendMessage(sender, formatCommand("balance", "Get the balance of a player"));
+                MessageUtils.sendMessage(sender, formatCommand("/balancetop", "Show the balance top"));
+                MessageUtils.sendMessage(sender, formatCommand("/balance", "Get the balance of a player"));
             }
 
-            private String formatCommand(String command, String description) {
-                return "&e/{command}: &f{description}".replace("{command}", command).replace("{description}", description);
+            private String formatCommand(String usage, String description) {
+                return "&e{usage}: &f{description}".replace("{usage}", usage).replace("{description}", description);
             }
 
             @Override
