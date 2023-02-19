@@ -30,6 +30,8 @@ import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.ServicePriority;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -99,5 +101,10 @@ public final class BetterEconomy extends BasePlugin {
     @Override
     public void postDisable() {
         economyHandler.disable();
+    }
+
+    @Override
+    protected List<Class<?>> getPermissionClasses() {
+        return Collections.singletonList(Permissions.class);
     }
 }
