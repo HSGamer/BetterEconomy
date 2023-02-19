@@ -2,9 +2,9 @@ package me.hsgamer.bettereconomy.command;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
+import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,12 +45,12 @@ public class BalanceTopCommand extends Command {
         int endIndex = Math.min(list.size(), startIndex + 10);
         for (int index = startIndex; index < endIndex; index++) {
             PlayerBalanceSnapshot snapshot = list.get(index);
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(snapshot.getUuid());
+            OfflinePlayer offlinePlayer = Utils.getOfflinePlayer(snapshot.getUuid());
             MessageUtils.sendMessage(
                     sender,
                     instance.getMessageConfig().getBalanceTopOutput()
                             .replace("{place}", Integer.toString(index + 1))
-                            .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+                            .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(Utils.getUniqueId(offlinePlayer).toString()))
                             .replace("{balance}", instance.getMainConfig().format(snapshot.getBalance()))
             );
         }

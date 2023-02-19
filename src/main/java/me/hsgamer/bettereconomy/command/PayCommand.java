@@ -45,8 +45,8 @@ public class PayCommand extends Command {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getCannotDo());
             return false;
         }
-        UUID playerUUID = player.getUniqueId();
-        UUID receiverUUID = receiver.getUniqueId();
+        UUID playerUUID = Utils.getUniqueId(player);
+        UUID receiverUUID = Utils.getUniqueId(receiver);
         if (!instance.getEconomyHandler().hasAccount(receiverUUID)) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return false;
@@ -67,7 +67,7 @@ public class PayCommand extends Command {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getGiveSuccess()
                         .replace("{balance}", instance.getMainConfig().format(amount))
-                        .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiver.getUniqueId().toString()))
+                        .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiverUUID.toString()))
         );
         return true;
     }

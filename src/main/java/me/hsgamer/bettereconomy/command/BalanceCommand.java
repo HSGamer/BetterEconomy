@@ -4,7 +4,6 @@ import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,16 +26,15 @@ public class BalanceCommand extends Command {
         if (!testPermission(sender)) {
             return false;
         }
-        OfflinePlayer who;
+        UUID uuid;
         if (args.length > 0 && sender.hasPermission(Permissions.BALANCE_OTHERS)) {
-            who = Utils.getOfflinePlayer(args[0]);
+            uuid = Utils.getUniqueId(args[0]);
         } else if (sender instanceof Player) {
-            who = (OfflinePlayer) sender;
+            uuid = ((Player) sender).getUniqueId();
         } else {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerOnly());
             return false;
         }
-        UUID uuid = who.getUniqueId();
         if (!instance.getEconomyHandler().hasAccount(uuid)) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return false;

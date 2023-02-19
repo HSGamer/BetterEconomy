@@ -1,8 +1,8 @@
 package me.hsgamer.bettereconomy.top;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ public class TopRunnable extends BukkitRunnable {
     public void run() {
         List<PlayerBalanceSnapshot> list = Arrays.stream(Bukkit.getOfflinePlayers())
                 .parallel()
-                .map(OfflinePlayer::getUniqueId)
+                .map(Utils::getUniqueId)
                 .filter(instance.getEconomyHandler()::hasAccount)
                 .map(uuid -> PlayerBalanceSnapshot.of(uuid, instance.getEconomyHandler().get(uuid)))
                 .sorted(Comparator.comparingDouble(PlayerBalanceSnapshot::getBalance).reversed())

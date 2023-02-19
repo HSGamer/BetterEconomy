@@ -1,6 +1,7 @@
 package me.hsgamer.bettereconomy.command.sub;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -14,7 +15,7 @@ public class SetSubCommand extends ChangeMoneySubCommand {
 
     @Override
     protected boolean tryChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
-        return instance.getEconomyHandler().set(offlinePlayer.getUniqueId(), amount);
+        return instance.getEconomyHandler().set(Utils.getUniqueId(offlinePlayer), amount);
     }
 
     @Override
@@ -22,7 +23,7 @@ public class SetSubCommand extends ChangeMoneySubCommand {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getSetSuccess()
                         .replace("{balance}", instance.getMainConfig().format(amount))
-                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(Utils.getUniqueId(offlinePlayer).toString()))
         );
     }
 
@@ -31,7 +32,7 @@ public class SetSubCommand extends ChangeMoneySubCommand {
         MessageUtils.sendMessage(sender,
                 instance.getMessageConfig().getSetFail()
                         .replace("{balance}", instance.getMainConfig().format(amount))
-                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(offlinePlayer.getUniqueId().toString()))
+                        .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(Utils.getUniqueId(offlinePlayer).toString()))
         );
     }
 }

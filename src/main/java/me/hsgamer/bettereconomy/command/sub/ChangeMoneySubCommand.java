@@ -35,7 +35,7 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         OfflinePlayer offlinePlayer = Utils.getOfflinePlayer(args[0]);
-        if (!instance.getEconomyHandler().hasAccount(offlinePlayer.getUniqueId())) {
+        if (!instance.getEconomyHandler().hasAccount(Utils.getUniqueId(offlinePlayer))) {
             MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
             return;
         }
