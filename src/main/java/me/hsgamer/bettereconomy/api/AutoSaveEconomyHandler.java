@@ -6,20 +6,24 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AutoSaveEconomyHandler extends EconomyHandler {
+public abstract class AutoSaveEconomyHandler extends EconomyHandler implements Runnable {
     private final AtomicBoolean needSaving = new AtomicBoolean();
-    private final BukkitTask task;
+    private BukkitTask task;
 
     protected AutoSaveEconomyHandler(BetterEconomy instance) {
         super(instance);
-        task = Bukkit.getScheduler().runTaskTimerAsynchronously(
-                instance, this::executeSaveTask,
-                instance.getMainConfig().getSaveFilePeriod(),
-                instance.getMainConfig().getSaveFilePeriod()
-        );
+        int period = instance.getMainConfig().getSaveFilePeriod();
+        if (period >= 0) {
+            task = Bukkit.getScheduler().runTaskTimerAsynchronously(
+                    instance, this,
+                    instance.getMainConfig().getSaveFilePeriod(),
+                    instance.getMainConfig().getSaveFilePeriod()
+            );
+        }
     }
 
-    private void executeSaveTask() {
+    @Override
+    public final void run() {
         if (!needSaving.get()) {
             return;
         }
@@ -37,7 +41,9 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler {
 
     @Override
     public void disable() {
-        task.cancel();
+        if (task != null) {
+            task.cancel();
+        }
         save();
     }
 }
