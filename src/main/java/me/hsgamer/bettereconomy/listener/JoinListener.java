@@ -15,7 +15,7 @@ public class JoinListener implements Listener {
     }
 
     @EventHandler
-    public void onPreLogin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
         if (!instance.getEconomyHandler().hasAccount(uuid)) {
             instance.getEconomyHandler().createAccount(uuid);
