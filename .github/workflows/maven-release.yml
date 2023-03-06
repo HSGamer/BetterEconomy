@@ -37,10 +37,6 @@ jobs:
             ./target/BetterEconomy*.jar
             CHANGELOG.md
 
-      - name: Publish Package
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload to Discord
         uses: sinshutu/upload-to-discord@v2.0.0
         env:

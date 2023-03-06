@@ -18,14 +18,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/HSGamer/BetterEconomy</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <finalName>${project.name}-${project.version}</finalName>
         <plugins>
