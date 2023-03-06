@@ -48,6 +48,11 @@ public interface MessageConfig {
         return "&aSuccessfully give {balance} to {name}";
     }
 
+    @ConfigPath("receive")
+    default String getReceive() {
+        return "&aYou received {balance} from {name}";
+    }
+
     @ConfigPath("take-success")
     default String getTakeSuccess() {
         return "&aSuccessfully take {balance} from {name}";

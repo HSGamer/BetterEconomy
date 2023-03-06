@@ -69,6 +69,11 @@ public class PayCommand extends Command {
                         .replace("{balance}", instance.getMainConfig().format(amount))
                         .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiverUUID.toString()))
         );
+        MessageUtils.sendMessage(receiverUUID,
+                instance.getMessageConfig().getReceive()
+                        .replace("{balance}", instance.getMainConfig().format(amount))
+                        .replace("{name}", player.getName())
+        );
         return true;
     }
 }
