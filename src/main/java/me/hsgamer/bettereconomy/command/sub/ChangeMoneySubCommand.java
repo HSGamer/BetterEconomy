@@ -14,7 +14,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,7 +39,7 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
         if (selector.startsWith("@")) {
             switch (selector) {
                 case "@a":
-                    return new ArrayList<>(Bukkit.getOnlinePlayers());
+                    return Bukkit.getOnlinePlayers();
                 case "@p":
                     if (sender instanceof Player) {
                         return Collections.singletonList((Player) sender);
