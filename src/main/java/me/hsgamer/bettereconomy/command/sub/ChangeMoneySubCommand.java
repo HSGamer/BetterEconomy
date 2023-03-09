@@ -63,6 +63,10 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
         double amount = amountOptional.get();
 
         Collection<? extends OfflinePlayer> offlinePlayers = getPlayersFromSelector(sender, args[0]);
+        if (offlinePlayers.isEmpty()) {
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getEmptyPlayerSelector());
+            return;
+        }
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
             if (!instance.getEconomyHandler().hasAccount(Utils.getUniqueId(offlinePlayer))) {
                 MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());

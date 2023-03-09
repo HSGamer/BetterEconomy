@@ -18,6 +18,11 @@ public interface MessageConfig {
         return "&cThis command is for player only";
     }
 
+    @ConfigPath("empty-player-selector")
+    default String getEmptyPlayerSelector() {
+        return "&cNo player is selected";
+    }
+
     @ConfigPath("balance-output")
     default String getBalanceOutput() {
         return "&eBalance: &f{balance}";
