@@ -7,7 +7,7 @@ import me.hsgamer.bettereconomy.command.sub.ReloadSubCommand;
 import me.hsgamer.bettereconomy.command.sub.SetSubCommand;
 import me.hsgamer.bettereconomy.command.sub.TakeSubCommand;
 import me.hsgamer.hscore.bukkit.command.sub.SubCommandManager;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -25,19 +25,15 @@ public class MainCommand extends Command {
             @Override
             public void sendHelpMessage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
                 if (sender.hasPermission(Permissions.ADMIN)) {
-                    subcommands.values().forEach(subCommand -> MessageUtils.sendMessage(sender, formatCommand(subCommand.getUsage().replace("<label>", label), subCommand.getDescription())));
+                    super.sendHelpMessage(sender, label, args);
                 }
-                MessageUtils.sendMessage(sender, formatCommand("/balancetop", "Show the balance top"));
-                MessageUtils.sendMessage(sender, formatCommand("/balance", "Get the balance of a player"));
+                sendCommand(sender, "/balancetop", "Show the balance top");
+                sendCommand(sender, "/balance", "Get the balance of a player");
             }
 
-            private String formatCommand(String usage, String description) {
-                return "&e{usage}: &f{description}".replace("{usage}", usage).replace("{description}", description);
-            }
-
-            @Override
-            public void sendArgNotFoundMessage(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-                MessageUtils.sendMessage(sender, instance.getMessageConfig().getArgNotFound());
+            private void sendCommand(CommandSender sender, String usage, String description) {
+                sender.sendMessage(ChatColor.YELLOW + usage);
+                sender.sendMessage(ChatColor.WHITE + "  " + description);
             }
         };
         this.subCommandManager.registerSubcommand(new GiveSubCommand(instance));
