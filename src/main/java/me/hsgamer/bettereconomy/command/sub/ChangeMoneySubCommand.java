@@ -43,8 +43,9 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
                 case "@p":
                     if (sender instanceof Player) {
                         return Collections.singletonList((Player) sender);
+                    } else {
+                        return Collections.emptyList();
                     }
-                    break;
                 default:
                     break;
             }
