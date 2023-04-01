@@ -21,6 +21,7 @@ import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.builder.Builder;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
@@ -83,9 +84,7 @@ public final class BetterEconomy extends BasePlugin {
         registerCommand(new PayCommand(this));
         registerCommand(new MainCommand(this));
         registerListener(new JoinListener(this));
-        if (mainConfig.isMetrics()) {
-            new Metrics(this, 12981);
-        }
+        new Metrics(this, 12981);
     }
 
     @Override

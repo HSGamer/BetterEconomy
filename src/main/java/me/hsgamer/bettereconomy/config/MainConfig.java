@@ -10,11 +10,6 @@ import java.util.Collections;
 import java.util.Map;
 
 public interface MainConfig {
-    @ConfigPath("metrics")
-    default boolean isMetrics() {
-        return true;
-    }
-
     @ConfigPath("handler-type")
     default String getHandlerType() {
         return "file";
