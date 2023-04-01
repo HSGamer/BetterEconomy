@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class TopRunnable extends BukkitRunnable {
+public class TopRunnable implements Runnable {
     private final BetterEconomy instance;
     private final AtomicReference<List<PlayerBalanceSnapshot>> topList = new AtomicReference<>(Collections.emptyList());
 

@@ -90,7 +90,7 @@ public final class BetterEconomy extends BasePlugin {
 
     @Override
     public void postEnable() {
-        topRunnable.runTaskTimerAsynchronously(this, 0, mainConfig.getUpdateBalanceTopPeriod());
+        Scheduler.CURRENT.runTaskTimer(this, topRunnable, 0, mainConfig.getUpdateBalanceTopPeriod(), true);
     }
 
     @Override
