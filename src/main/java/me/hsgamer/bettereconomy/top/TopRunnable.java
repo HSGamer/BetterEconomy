@@ -3,7 +3,6 @@ package me.hsgamer.bettereconomy.top;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class TopRunnable implements Runnable {
                 .parallel()
                 .map(Utils::getUniqueId)
                 .filter(instance.getEconomyHandler()::hasAccount)
-                .map(uuid -> PlayerBalanceSnapshot.of(uuid, instance.getEconomyHandler().get(uuid)))
+                .map(uuid -> new PlayerBalanceSnapshot(uuid, instance.getEconomyHandler().get(uuid)))
                 .sorted(Comparator.comparingDouble(PlayerBalanceSnapshot::getBalance).reversed())
                 .collect(Collectors.toList());
         topList.lazySet(list);

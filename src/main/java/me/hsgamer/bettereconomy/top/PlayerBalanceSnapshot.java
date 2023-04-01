@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.UUID;
 
-@Data(staticConstructor = "of")
+@Data
 public class PlayerBalanceSnapshot {
     private final UUID uuid;
     private final double balance;
