@@ -1,23 +1,25 @@
 package me.hsgamer.bettereconomy.api;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
+import me.hsgamer.hscore.bukkit.scheduler.Task;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AutoSaveEconomyHandler extends EconomyHandler implements Runnable {
     private final AtomicBoolean needSaving = new AtomicBoolean();
-    private BukkitTask task;
+    private Task task;
 
     protected AutoSaveEconomyHandler(BetterEconomy instance) {
         super(instance);
         int period = instance.getMainConfig().getSaveFilePeriod();
         if (period >= 0) {
-            task = Bukkit.getScheduler().runTaskTimerAsynchronously(
+            task = Scheduler.CURRENT.runTaskTimer(
                     instance, this,
                     instance.getMainConfig().getSaveFilePeriod(),
-                    instance.getMainConfig().getSaveFilePeriod()
+                    instance.getMainConfig().getSaveFilePeriod(),
+                    true
             );
         }
     }

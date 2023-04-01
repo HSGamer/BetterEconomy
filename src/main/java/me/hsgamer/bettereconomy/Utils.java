@@ -1,5 +1,6 @@
 package me.hsgamer.bettereconomy;
 
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
@@ -31,10 +32,10 @@ public final class Utils {
     }
 
     public static void schedule(Runnable runnable) {
-        Bukkit.getScheduler().runTask(JavaPlugin.getProvidingPlugin(Utils.class), runnable);
+        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(Utils.class), runnable, false);
     }
 
     public static void scheduleAsync(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(JavaPlugin.getProvidingPlugin(Utils.class), runnable);
+        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(Utils.class), runnable, true);
     }
 }

@@ -9,3 +9,4 @@ authors:
   - HSGamer
   - takahatashun
 description: ${project.description}
+folia-supported: true
