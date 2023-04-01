@@ -3,7 +3,6 @@ package me.hsgamer.bettereconomy.api;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.hscore.bukkit.scheduler.Task;
-import org.bukkit.Bukkit;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,10 +28,10 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler implements R
         if (!needSaving.get()) {
             return;
         }
-        Bukkit.getScheduler().runTask(instance, () -> {
+        Scheduler.CURRENT.runTask(instance, () -> {
             this.save();
             needSaving.set(false);
-        });
+        }, false);
     }
 
     protected abstract void save();
