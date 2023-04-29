@@ -11,14 +11,10 @@ import java.util.UUID;
 public class FlatFileEconomyHandler extends AutoSaveEconomyHandler {
     private final Config config;
 
-    public FlatFileEconomyHandler(BetterEconomy instance, Config config) {
-        super(instance);
-        this.config = config;
-        config.setup();
-    }
-
     public FlatFileEconomyHandler(BetterEconomy instance) {
-        this(instance, new BukkitConfig(instance, "balances.yml"));
+        super(instance);
+        this.config = new BukkitConfig(instance, "balances.yml");
+        config.setup();
     }
 
     @Override

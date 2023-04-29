@@ -146,17 +146,6 @@
         </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
-            <artifactId>hscore-config-gson</artifactId>
-            <version>${core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.gson</groupId>
-                    <artifactId>gson</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>me.hsgamer</groupId>
             <artifactId>hscore-config-proxy</artifactId>
             <version>${core.version}</version>
         </dependency>

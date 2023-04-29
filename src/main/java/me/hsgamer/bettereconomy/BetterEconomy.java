@@ -67,7 +67,7 @@ public final class BetterEconomy extends BasePlugin {
             }
         }
 
-        ECONOMY_HANDLER_BUILDER.register(plugin -> new FlatFileEconomyHandler(plugin), "flat-file", "flatfile", "file");
+        ECONOMY_HANDLER_BUILDER.register(FlatFileEconomyHandler::new, "flat-file", "flatfile", "file");
         ECONOMY_HANDLER_BUILDER.register(MySqlEconomyHandler::new, "mysql");
         ECONOMY_HANDLER_BUILDER.register(SqliteEconomyHandler::new, "sqlite");
         ECONOMY_HANDLER_BUILDER.register(JsonEconomyHandler::new, "json");
