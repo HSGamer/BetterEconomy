@@ -14,11 +14,10 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler implements R
         super(instance);
         int period = instance.getMainConfig().getSaveFilePeriod();
         if (period >= 0) {
-            task = Scheduler.CURRENT.runTaskTimer(
-                    instance, this,
+            task = Scheduler.plugin(instance).async().runTaskTimer(
+                    this,
                     instance.getMainConfig().getSaveFilePeriod(),
-                    instance.getMainConfig().getSaveFilePeriod(),
-                    true
+                    instance.getMainConfig().getSaveFilePeriod()
             );
         }
     }
@@ -28,10 +27,10 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler implements R
         if (!needSaving.get()) {
             return;
         }
-        Scheduler.CURRENT.runTask(instance, () -> {
+        Scheduler.plugin(instance).sync().runTask(() -> {
             this.save();
             needSaving.set(false);
-        }, false);
+        });
     }
 
     protected abstract void save();

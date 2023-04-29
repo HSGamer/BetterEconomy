@@ -3,31 +3,37 @@ package me.hsgamer.bettereconomy.handler;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.AutoSaveEconomyHandler;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
+import me.hsgamer.hscore.config.Config;
+import me.hsgamer.hscore.config.PathString;
 
 import java.util.UUID;
 
 public class FlatFileEconomyHandler extends AutoSaveEconomyHandler {
-    private final BukkitConfig storageFile;
+    private final Config config;
+
+    public FlatFileEconomyHandler(BetterEconomy instance, Config config) {
+        super(instance);
+        this.config = config;
+        config.setup();
+    }
 
     public FlatFileEconomyHandler(BetterEconomy instance) {
-        super(instance);
-        storageFile = new BukkitConfig(instance, "balances.yml");
-        storageFile.setup();
+        this(instance, new BukkitConfig(instance, "balances.yml"));
     }
 
     @Override
     protected void save() {
-        storageFile.save();
+        config.save();
     }
 
     @Override
     public boolean hasAccount(UUID uuid) {
-        return storageFile.contains(uuid.toString());
+        return config.contains(new PathString(uuid.toString()));
     }
 
     @Override
     public double get(UUID uuid) {
-        return storageFile.getInstance(uuid.toString(), 0, Number.class).doubleValue();
+        return config.getInstance(new PathString(uuid.toString()), 0, Number.class).doubleValue();
     }
 
     @Override
@@ -35,7 +41,7 @@ public class FlatFileEconomyHandler extends AutoSaveEconomyHandler {
         if (amount < 0) {
             return false;
         }
-        storageFile.set(uuid.toString(), amount);
+        config.set(new PathString(uuid.toString()), amount);
         enableSave();
         return true;
     }
@@ -45,7 +51,7 @@ public class FlatFileEconomyHandler extends AutoSaveEconomyHandler {
         if (hasAccount(uuid)) {
             return false;
         }
-        storageFile.set(uuid.toString(), startAmount);
+        config.set(new PathString(uuid.toString()), startAmount);
         enableSave();
         return true;
     }

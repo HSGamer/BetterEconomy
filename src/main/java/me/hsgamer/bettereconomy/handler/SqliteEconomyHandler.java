@@ -8,8 +8,7 @@ public class SqliteEconomyHandler extends SqlEconomyHandler {
     public SqliteEconomyHandler(BetterEconomy instance) {
         super(
                 instance,
-                Setting.create().setDatabaseName(instance.getMainConfig().getSqliteDatabaseName()),
-                new SqliteFileDriver(instance.getDataFolder())
+                Setting.create(new SqliteFileDriver(instance.getDataFolder())).setDatabaseName(instance.getMainConfig().getSqliteDatabaseName())
         );
     }
 }

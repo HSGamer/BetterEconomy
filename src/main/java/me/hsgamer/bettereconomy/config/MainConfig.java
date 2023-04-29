@@ -20,92 +20,92 @@ public interface MainConfig {
         return true;
     }
 
-    @ConfigPath("currency.singular")
+    @ConfigPath({"currency", "singular"})
     default String getCurrencySingular() {
         return "$";
     }
 
-    @ConfigPath("currency.plural")
+    @ConfigPath({"currency", "plural"})
     default String getCurrencyPlural() {
         return "$";
     }
 
-    @ConfigPath("currency.symbol")
+    @ConfigPath({"currency", "symbol"})
     default String getCurrencySymbol() {
         return "$";
     }
 
-    @ConfigPath("currency.format-fractional-digits")
+    @ConfigPath({"currency", "format-fractional-digits"})
     default int getFractionalDigits() {
         return 2;
     }
 
-    @ConfigPath("currency.decimal-point")
+    @ConfigPath({"currency", "decimal-point"})
     default String getDecimalPoint() {
         return ".";
     }
 
-    @ConfigPath("currency.use-thousands-separator")
+    @ConfigPath({"currency", "use-thousands-separator"})
     default boolean isUseThousandsSeparator() {
         return true;
     }
 
-    @ConfigPath("currency.thousands-separator")
+    @ConfigPath({"currency", "thousands-separator"})
     default String getThousandsSeparator() {
         return ",";
     }
 
-    @ConfigPath("balance.top-update-period")
+    @ConfigPath({"balance", "top-update-period"})
     default int getUpdateBalanceTopPeriod() {
         return 100;
     }
 
-    @ConfigPath("balance.file-save-period")
+    @ConfigPath({"balance", "file-save-period"})
     default int getSaveFilePeriod() {
         return 200;
     }
 
-    @ConfigPath("balance.start-amount")
+    @ConfigPath({"balance", "start-amount"})
     default double getStartAmount() {
         return 0;
     }
 
-    @ConfigPath("database.mysql.host")
+    @ConfigPath({"database", "mysql", "host"})
     default String getMysqlHost() {
         return "localhost";
     }
 
-    @ConfigPath("database.mysql.port")
+    @ConfigPath({"database", "mysql", "port"})
     default String getMysqlPort() {
         return "3306";
     }
 
-    @ConfigPath("database.mysql.dbname")
+    @ConfigPath({"database", "mysql", "dbname"})
     default String getMysqlDatabaseName() {
         return "";
     }
 
-    @ConfigPath("database.mysql.username")
+    @ConfigPath({"database", "mysql", "username"})
     default String getMysqlUsername() {
         return "root";
     }
 
-    @ConfigPath("database.mysql.password")
+    @ConfigPath({"database", "mysql", "password"})
     default String getMysqlPassword() {
         return "";
     }
 
-    @ConfigPath("database.sqlite.dbname")
+    @ConfigPath({"database", "sqlite", "dbname"})
     default String getSqliteDatabaseName() {
         return "balances";
     }
 
-    @ConfigPath(value = "database.common.client-settings")
+    @ConfigPath({"database", "common", "client-settings"})
     default Map<String, Object> getDatabaseClientSettings() {
         return Collections.emptyMap();
     }
 
-    @ConfigPath(value = "database.common.driver-settings")
+    @ConfigPath({"database", "common", "driver-settings"})
     default Map<String, Object> getDatabaseDriverSettings() {
         return Collections.emptyMap();
     }

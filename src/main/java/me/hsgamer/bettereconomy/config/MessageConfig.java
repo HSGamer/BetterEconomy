@@ -38,11 +38,6 @@ public interface MessageConfig {
         return "&eThe balance top is empty";
     }
 
-    @ConfigPath("arg-not-found")
-    default String getArgNotFound() {
-        return "&cInvalid Argument";
-    }
-
     @ConfigPath("invalid-amount")
     default String getInvalidAmount() {
         return "&cInvalid Amount";

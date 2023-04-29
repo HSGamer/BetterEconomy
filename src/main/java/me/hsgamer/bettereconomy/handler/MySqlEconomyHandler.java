@@ -8,13 +8,12 @@ public class MySqlEconomyHandler extends SqlEconomyHandler {
     public MySqlEconomyHandler(BetterEconomy instance) {
         super(
                 instance,
-                Setting.create()
+                Setting.create(new MySqlDriver())
                         .setHost(instance.getMainConfig().getMysqlHost())
                         .setPort(instance.getMainConfig().getMysqlPort())
                         .setDatabaseName(instance.getMainConfig().getMysqlDatabaseName())
                         .setUsername(instance.getMainConfig().getMysqlUsername())
-                        .setPassword(instance.getMainConfig().getMysqlPassword()),
-                new MySqlDriver()
+                        .setPassword(instance.getMainConfig().getMysqlPassword())
         );
     }
 }

@@ -2,7 +2,6 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
-import me.hsgamer.hscore.database.Driver;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.SqlClient;
 import me.hsgamer.hscore.database.client.sql.StatementBuilder;
@@ -20,7 +19,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
     private final SqlClient<?> client;
     private final AtomicReference<Connection> connectionReference = new AtomicReference<>();
 
-    SqlEconomyHandler(BetterEconomy instance, Setting setting, Driver driver) {
+    SqlEconomyHandler(BetterEconomy instance, Setting setting) {
         super(instance);
 
         setting
@@ -28,7 +27,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
                 .setDriverProperties(instance.getMainConfig().getDatabaseDriverSettings());
 
         try {
-            client = new JavaSqlClient(setting, driver);
+            client = new JavaSqlClient(setting);
             connectionReference.set(client.getConnection());
         } catch (SQLException e) {
             throw new IllegalStateException("constructor()#connection", e);

@@ -4,7 +4,6 @@ import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -32,10 +31,10 @@ public final class Utils {
     }
 
     public static void schedule(Runnable runnable) {
-        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(Utils.class), runnable, false);
+        Scheduler.providingPlugin(Utils.class).sync().runTask(runnable);
     }
 
     public static void scheduleAsync(Runnable runnable) {
-        Scheduler.CURRENT.runTask(JavaPlugin.getProvidingPlugin(Utils.class), runnable, true);
+        Scheduler.providingPlugin(Utils.class).async().runTask(runnable);
     }
 }
