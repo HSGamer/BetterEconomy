@@ -43,3 +43,17 @@ database:
     username: root
     password: ''
 ```
+
+## Placeholders
+
+> Requires [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/)
+
+| Placeholder                                      | Description                                                                    |
+|--------------------------------------------------|--------------------------------------------------------------------------------|
+| `%bettereconomy_balance%`                        | The balance of the player                                                      |
+| `%bettereconomy_balance_formatted%`              | The formatted balance of the player                                            |
+| `%bettereconomy_top%`                            | The current top position of the player                                         |
+| `%bettereconomy_top_name_<number>%`              | The name of the player at the position `<number>` (starts from 1)              |
+| `%bettereconomy_top_uuid_<number>%`              | The uuid of the player at the position `<number>` (starts from 1)              |
+| `%bettereconomy_top_balance_<number>%`           | The balance of the player at the position `<number>` (starts from 1)           |
+| `%bettereconomy_top_balance_formatted_<number>%` | The formatted balance of the player at the position `<number>` (starts from 1) |
