@@ -14,6 +14,7 @@ import me.hsgamer.bettereconomy.handler.FlatFileEconomyHandler;
 import me.hsgamer.bettereconomy.handler.JsonEconomyHandler;
 import me.hsgamer.bettereconomy.handler.MySqlEconomyHandler;
 import me.hsgamer.bettereconomy.handler.SqliteEconomyHandler;
+import me.hsgamer.bettereconomy.hook.placeholderapi.EconomyPlaceholder;
 import me.hsgamer.bettereconomy.hook.treasury.TreasuryEconomyHook;
 import me.hsgamer.bettereconomy.hook.vault.VaultEconomyHook;
 import me.hsgamer.bettereconomy.listener.JoinListener;
@@ -29,6 +30,7 @@ import me.lokka30.treasury.api.common.service.ServiceRegistry;
 import me.lokka30.treasury.api.economy.EconomyProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 
 import java.util.Collections;
@@ -85,6 +87,10 @@ public final class BetterEconomy extends BasePlugin {
         registerCommand(new MainCommand(this));
         registerListener(new JoinListener(this));
         new Metrics(this, 12981);
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new EconomyPlaceholder(this).register();
+        }
     }
 
     @Override
