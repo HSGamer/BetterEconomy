@@ -4,7 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +50,7 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
-    public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
+    public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         String lower = params.toLowerCase(Locale.ROOT);
         if (lower.startsWith("top_")) {
             String query = lower.substring(4);
