@@ -96,6 +96,8 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
                 return String.valueOf(instance.getEconomyHandler().get(player.getUniqueId()));
             case "balance_formatted":
                 return instance.getMainConfig().format(instance.getEconomyHandler().get(player.getUniqueId()));
+            case "top":
+                return String.valueOf(instance.getTopRunnable().getTopIndex(player.getUniqueId()) + 1);
         }
 
         return null;
