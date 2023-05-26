@@ -67,7 +67,7 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
                 index = query.substring(5);
                 function = snapshot -> snapshot.getUuid().toString();
             } else if (query.startsWith("balance_formatted_")) {
-                index = query.substring(19);
+                index = query.substring(18);
                 function = snapshot -> instance.getMainConfig().format(snapshot.getBalance());
             } else if (query.startsWith("balance_")) {
                 index = query.substring(8);
