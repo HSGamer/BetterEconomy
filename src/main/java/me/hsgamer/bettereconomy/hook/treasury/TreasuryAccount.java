@@ -2,13 +2,10 @@ package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Utils;
+import me.lokka30.treasury.api.common.misc.FutureHelper;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
 import me.lokka30.treasury.api.economy.currency.Currency;
-import me.lokka30.treasury.api.economy.response.EconomyException;
-import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
-import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import me.lokka30.treasury.api.economy.transaction.EconomyTransaction;
-import me.lokka30.treasury.api.economy.transaction.EconomyTransactionInitiator;
 import me.lokka30.treasury.api.economy.transaction.EconomyTransactionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class TreasuryAccount implements PlayerAccount {
     private final BetterEconomy instance;
@@ -29,57 +27,35 @@ public class TreasuryAccount implements PlayerAccount {
     }
 
     @Override
-    public @NotNull UUID getUniqueId() {
+    public @NotNull UUID identifier() {
         return uuid;
     }
 
     @Override
-    public Optional<String> getName() {
+    public @NotNull Optional<String> getName() {
         return Optional.ofNullable(Utils.getOfflinePlayer(uuid).getName());
     }
 
     @Override
-    public void retrieveBalance(@NotNull Currency currency, @NotNull EconomySubscriber<BigDecimal> subscription) {
+    public @NotNull CompletableFuture<BigDecimal> retrieveBalance(@NotNull Currency currency) {
         if (!currency.getIdentifier().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
-            subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
+            return FutureHelper.failedFuture(FailureReasons.CURRENCY_NOT_FOUND.toException());
         } else {
-            Utils.scheduleAsync(() -> {
-                double amount = instance.getEconomyHandler().get(uuid);
-                subscription.succeed(BigDecimal.valueOf(amount));
-            });
+            return CompletableFuture.supplyAsync(() -> BigDecimal.valueOf(instance.getEconomyHandler().get(uuid)));
         }
     }
 
     @Override
-    public void setBalance(@NotNull BigDecimal amount, @NotNull EconomyTransactionInitiator<?> initiator, @NotNull Currency currency, @NotNull EconomySubscriber<BigDecimal> subscription) {
-        if (!currency.getIdentifier().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
-            subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
-        } else {
-            Utils.scheduleAsync(() -> {
-                double amountDouble = amount.doubleValue();
-                boolean status = instance.getEconomyHandler().set(uuid, amountDouble);
-                if (!status) {
-                    subscription.fail(new EconomyException(EconomyFailureReason.NEGATIVE_AMOUNT_SPECIFIED));
-                } else {
-                    subscription.succeed(BigDecimal.valueOf(amountDouble));
-                }
-            });
-        }
-    }
-
-    @Override
-    public void doTransaction(@NotNull EconomyTransaction economyTransaction, EconomySubscriber<BigDecimal> subscription) {
-        Utils.scheduleAsync(() -> {
-            if (!economyTransaction.getCurrencyID().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
-                subscription.fail(new EconomyException(EconomyFailureReason.CURRENCY_NOT_FOUND));
-                return;
+    public @NotNull CompletableFuture<BigDecimal> doTransaction(@NotNull EconomyTransaction economyTransaction) {
+        return CompletableFuture.supplyAsync(() -> {
+            if (!economyTransaction.getCurrencyId().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
+                throw FailureReasons.CURRENCY_NOT_FOUND.toException();
             }
-            EconomyTransactionType type = economyTransaction.getTransactionType();
-            BigDecimal amount = economyTransaction.getTransactionAmount();
+            EconomyTransactionType type = economyTransaction.getType();
+            BigDecimal amount = economyTransaction.getAmount();
             double amountDouble = amount.doubleValue();
             if (amountDouble < 0) {
-                subscription.fail(new EconomyException(EconomyFailureReason.NEGATIVE_AMOUNT_SPECIFIED));
-                return;
+                throw FailureReasons.NEGATIVE_BALANCES_NOT_SUPPORTED.toException();
             }
             boolean status = false;
             if (type == EconomyTransactionType.DEPOSIT) {
@@ -88,29 +64,25 @@ public class TreasuryAccount implements PlayerAccount {
                 status = instance.getEconomyHandler().withdraw(uuid, amountDouble);
             }
             if (!status) {
-                subscription.fail(new EconomyException(EconomyFailureReason.NEGATIVE_AMOUNT_SPECIFIED));
+                throw FailureReasons.NEGATIVE_BALANCES_NOT_SUPPORTED.toException();
             } else {
-                double balance = instance.getEconomyHandler().get(uuid);
-                subscription.succeed(BigDecimal.valueOf(balance));
+                return BigDecimal.valueOf(instance.getEconomyHandler().get(uuid));
             }
         });
     }
 
     @Override
-    public void deleteAccount(@NotNull EconomySubscriber<Boolean> subscription) {
-        Utils.scheduleAsync(() -> {
-            boolean status = instance.getEconomyHandler().deleteAccount(uuid);
-            subscription.succeed(status);
-        });
+    public @NotNull CompletableFuture<Boolean> deleteAccount() {
+        return CompletableFuture.supplyAsync(() -> instance.getEconomyHandler().deleteAccount(uuid));
     }
 
     @Override
-    public void retrieveHeldCurrencies(@NotNull EconomySubscriber<Collection<String>> subscription) {
-        subscription.succeed(Collections.singletonList(TreasuryEconomyHook.CURRENCY_IDENTIFIER));
+    public @NotNull CompletableFuture<Collection<String>> retrieveHeldCurrencies() {
+        return CompletableFuture.completedFuture(Collections.singletonList(TreasuryEconomyHook.CURRENCY_IDENTIFIER));
     }
 
     @Override
-    public void retrieveTransactionHistory(int transactionCount, @NotNull Temporal from, @NotNull Temporal to, @NotNull EconomySubscriber<Collection<EconomyTransaction>> subscription) {
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED));
+    public @NotNull CompletableFuture<Collection<EconomyTransaction>> retrieveTransactionHistory(int transactionCount, @NotNull Temporal from, @NotNull Temporal to) {
+        return FutureHelper.failedFuture(FailureReasons.FEATURE_NOT_SUPPORTED.toException());
     }
 }

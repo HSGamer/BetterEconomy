@@ -1,106 +1,57 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
-import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
+import me.lokka30.treasury.api.common.NamespacedKey;
+import me.lokka30.treasury.api.common.misc.FutureHelper;
+import me.lokka30.treasury.api.common.misc.TriState;
 import me.lokka30.treasury.api.economy.EconomyProvider;
-import me.lokka30.treasury.api.economy.account.Account;
-import me.lokka30.treasury.api.economy.account.PlayerAccount;
+import me.lokka30.treasury.api.economy.account.AccountData;
+import me.lokka30.treasury.api.economy.account.accessor.AccountAccessor;
 import me.lokka30.treasury.api.economy.currency.Currency;
-import me.lokka30.treasury.api.economy.misc.OptionalEconomyApiFeature;
-import me.lokka30.treasury.api.economy.response.EconomyException;
-import me.lokka30.treasury.api.economy.response.EconomyFailureReason;
-import me.lokka30.treasury.api.economy.response.EconomySubscriber;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class TreasuryEconomyHook implements EconomyProvider {
     public static final String CURRENCY_IDENTIFIER = "better_economy_currency";
     private final BetterEconomy instance;
     private final Currency currency;
+    private final AccountAccessor accountAccessor;
 
     public TreasuryEconomyHook(BetterEconomy instance) {
         this.instance = instance;
         this.currency = new TreasuryCurrency(instance);
+        this.accountAccessor = new TreasuryAccountAccessor(instance);
     }
 
     @Override
-    public @NotNull Set<OptionalEconomyApiFeature> getSupportedOptionalEconomyApiFeatures() {
-        return Collections.emptySet();
+    public @NotNull AccountAccessor accountAccessor() {
+        return accountAccessor;
     }
 
     @Override
-    public void hasPlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<Boolean> subscription) {
-        Utils.scheduleAsync(() -> {
-            boolean status = instance.getEconomyHandler().hasAccount(accountId);
-            subscription.succeed(status);
-        });
+    public @NotNull CompletableFuture<Boolean> hasAccount(@NotNull AccountData accountData) {
+        if (accountData.isPlayerAccount()) {
+            return CompletableFuture.supplyAsync(() -> instance.getEconomyHandler().hasAccount(accountData.getPlayerIdentifier().get()));
+        } else {
+            return FutureHelper.failedFuture(FailureReasons.FEATURE_NOT_SUPPORTED.toException());
+        }
     }
 
     @Override
-    public void retrievePlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<PlayerAccount> subscription) {
-        Utils.scheduleAsync(() -> {
-            if (instance.getEconomyHandler().hasAccount(accountId)) {
-                subscription.succeed(new TreasuryAccount(instance, accountId));
-            } else {
-                subscription.fail(new EconomyException(EconomyFailureReason.ACCOUNT_NOT_FOUND));
-            }
-        });
+    public @NotNull CompletableFuture<Collection<UUID>> retrievePlayerAccountIds() {
+        return CompletableFuture.supplyAsync(() -> BukkitUtils.getAllUniqueIds()
+                .parallelStream()
+                .filter(uuid -> instance.getEconomyHandler().hasAccount(uuid))
+                .collect(Collectors.toList()));
     }
 
     @Override
-    public void createPlayerAccount(@NotNull UUID accountId, @NotNull EconomySubscriber<PlayerAccount> subscription) {
-        Utils.scheduleAsync(() -> {
-            instance.getEconomyHandler().createAccount(accountId);
-            subscription.succeed(new TreasuryAccount(instance, accountId));
-        });
-    }
-
-    @Override
-    public void retrievePlayerAccountIds(@NotNull EconomySubscriber<Collection<UUID>> subscription) {
-        Utils.scheduleAsync(() -> {
-            Collection<UUID> uuids = BukkitUtils.getAllUniqueIds()
-                    .parallelStream()
-                    .filter(uuid -> instance.getEconomyHandler().hasAccount(uuid))
-                    .collect(Collectors.toList());
-            subscription.succeed(uuids);
-        });
-    }
-
-    @Override
-    public void hasAccount(@NotNull String identifier, @NotNull EconomySubscriber<Boolean> subscription) {
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED));
-    }
-
-    @Override
-    public void retrieveAccount(@NotNull String identifier, @NotNull EconomySubscriber<Account> subscription) {
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED));
-    }
-
-    @Override
-    public void createAccount(@Nullable String name, @NotNull String identifier, @NotNull EconomySubscriber<Account> subscription) {
-        subscription.fail(new EconomyException(EconomyFailureReason.FEATURE_NOT_SUPPORTED));
-    }
-
-    @Override
-    public void retrieveAccountIds(@NotNull EconomySubscriber<Collection<String>> subscription) {
-        Utils.scheduleAsync(() -> {
-            Collection<String> identifiers = BukkitUtils.getAllUniqueIds()
-                    .parallelStream()
-                    .filter(uuid -> instance.getEconomyHandler().hasAccount(uuid))
-                    .map(uuid -> new TreasuryAccount(instance, uuid))
-                    .map(PlayerAccount::getIdentifier)
-                    .collect(Collectors.toList());
-            subscription.succeed(identifiers);
-        });
-    }
-
-    @Override
-    public void retrieveNonPlayerAccountIds(@NotNull EconomySubscriber<Collection<String>> subscription) {
-        subscription.succeed(Collections.emptyList());
+    public @NotNull CompletableFuture<Collection<NamespacedKey>> retrieveNonPlayerAccountIds() {
+        return CompletableFuture.completedFuture(Collections.emptyList());
     }
 
     @Override
@@ -109,17 +60,22 @@ public class TreasuryEconomyHook implements EconomyProvider {
     }
 
     @Override
-    public Optional<Currency> findCurrency(@NotNull String identifier) {
+    public @NotNull Optional<Currency> findCurrency(@NotNull String identifier) {
         return currency.getIdentifier().equals(CURRENCY_IDENTIFIER) ? Optional.of(currency) : Optional.empty();
     }
 
     @Override
-    public Set<Currency> getCurrencies() {
+    public @NotNull Set<Currency> getCurrencies() {
         return Collections.singleton(currency);
     }
 
     @Override
-    public void registerCurrency(@NotNull Currency currency, @NotNull EconomySubscriber<Boolean> subscription) {
-        subscription.succeed(false);
+    public @NotNull CompletableFuture<TriState> registerCurrency(@NotNull Currency currency) {
+        return CompletableFuture.completedFuture(TriState.FALSE);
+    }
+
+    @Override
+    public @NotNull CompletableFuture<TriState> unregisterCurrency(@NotNull Currency currency) {
+        return CompletableFuture.completedFuture(TriState.FALSE);
     }
 }
