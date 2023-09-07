@@ -70,7 +70,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
 
     @Override
     public boolean set(UUID uuid, double amount) {
-        if (amount < 0) {
+        if (amount < instance.getMainConfig().getMinimumAmount()) {
             return false;
         } else {
             return StatementBuilder.create(getConnection())

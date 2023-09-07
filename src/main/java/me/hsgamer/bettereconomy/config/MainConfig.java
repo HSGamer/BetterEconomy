@@ -70,6 +70,11 @@ public interface MainConfig {
         return 0;
     }
 
+    @ConfigPath({"balance", "min-amount"})
+    default double getMinimumAmount() {
+        return 0;
+    }
+
     @ConfigPath({"database", "mysql", "host"})
     default String getMysqlHost() {
         return "localhost";
