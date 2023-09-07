@@ -33,6 +33,7 @@ balance:
   top-update-period: 100
   file-save-period: 200
   start-amount: 0.0
+  min-amount: 0.0
 
 # Settings on database
 database:
