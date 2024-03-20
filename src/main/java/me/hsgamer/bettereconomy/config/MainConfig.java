@@ -10,102 +10,102 @@ import java.util.Collections;
 import java.util.Map;
 
 public interface MainConfig {
-    @ConfigPath("handler-type")
+    @ConfigPath(value = "handler-type")
     default String getHandlerType() {
         return "file";
     }
 
-    @ConfigPath({"currency", "singular"})
+    @ConfigPath(value = {"currency", "singular"}, priority = 1)
     default String getCurrencySingular() {
         return "$";
     }
 
-    @ConfigPath({"currency", "plural"})
+    @ConfigPath(value = {"currency", "plural"}, priority = 1)
     default String getCurrencyPlural() {
         return "$";
     }
 
-    @ConfigPath({"currency", "symbol"})
+    @ConfigPath(value = {"currency", "symbol"}, priority = 1)
     default String getCurrencySymbol() {
         return "$";
     }
 
-    @ConfigPath({"currency", "format-fractional-digits"})
+    @ConfigPath(value = {"currency", "format-fractional-digits"}, priority = 1)
     default int getFractionalDigits() {
         return 2;
     }
 
-    @ConfigPath({"currency", "decimal-point"})
+    @ConfigPath(value = {"currency", "decimal-point"}, priority = 1)
     default String getDecimalPoint() {
         return ".";
     }
 
-    @ConfigPath({"currency", "use-thousands-separator"})
+    @ConfigPath(value = {"currency", "use-thousands-separator"}, priority = 1)
     default boolean isUseThousandsSeparator() {
         return true;
     }
 
-    @ConfigPath({"currency", "thousands-separator"})
+    @ConfigPath(value = {"currency", "thousands-separator"}, priority = 1)
     default String getThousandsSeparator() {
         return ",";
     }
 
-    @ConfigPath({"balance", "top-update-period"})
+    @ConfigPath(value = {"balance", "top-update-period"}, priority = 2)
     default int getUpdateBalanceTopPeriod() {
         return 100;
     }
 
-    @ConfigPath({"balance", "file-save-period"})
+    @ConfigPath(value = {"balance", "file-save-period"}, priority = 2)
     default int getSaveFilePeriod() {
         return 200;
     }
 
-    @ConfigPath({"balance", "start-amount"})
+    @ConfigPath(value = {"balance", "start-amount"}, priority = 2)
     default double getStartAmount() {
         return 0;
     }
 
-    @ConfigPath({"balance", "min-amount"})
+    @ConfigPath(value = {"balance", "min-amount"}, priority = 2)
     default double getMinimumAmount() {
         return 0;
     }
 
-    @ConfigPath({"database", "mysql", "host"})
+    @ConfigPath(value = {"database", "mysql", "host"}, priority = 3)
     default String getMysqlHost() {
         return "localhost";
     }
 
-    @ConfigPath({"database", "mysql", "port"})
+    @ConfigPath(value = {"database", "mysql", "port"}, priority = 3)
     default String getMysqlPort() {
         return "3306";
     }
 
-    @ConfigPath({"database", "mysql", "dbname"})
+    @ConfigPath(value = {"database", "mysql", "dbname"}, priority = 3)
     default String getMysqlDatabaseName() {
         return "";
     }
 
-    @ConfigPath({"database", "mysql", "username"})
+    @ConfigPath(value = {"database", "mysql", "username"}, priority = 3)
     default String getMysqlUsername() {
         return "root";
     }
 
-    @ConfigPath({"database", "mysql", "password"})
+    @ConfigPath(value = {"database", "mysql", "password"}, priority = 3)
     default String getMysqlPassword() {
         return "";
     }
 
-    @ConfigPath({"database", "sqlite", "dbname"})
+    @ConfigPath(value = {"database", "sqlite", "dbname"}, priority = 3)
     default String getSqliteDatabaseName() {
         return "balances";
     }
 
-    @ConfigPath({"database", "common", "client-settings"})
+    @ConfigPath(value = {"database", "common", "client-settings"}, priority = 3)
     default Map<String, Object> getDatabaseClientSettings() {
         return Collections.emptyMap();
     }
 
-    @ConfigPath({"database", "common", "driver-settings"})
+    @ConfigPath(value = {"database", "common", "driver-settings"}, priority = 3)
     default Map<String, Object> getDatabaseDriverSettings() {
         return Collections.emptyMap();
     }
