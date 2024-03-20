@@ -23,13 +23,7 @@ public class HookProvider implements Loadable {
     }
 
     @Override
-    public void enable() {
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            EconomyPlaceholder economyPlaceholder = new EconomyPlaceholder(instance);
-            economyPlaceholder.register();
-            disableTasks.add(economyPlaceholder::unregister);
-        }
-
+    public void load() {
         if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             Bukkit.getServicesManager().register(
                     Economy.class,
@@ -45,6 +39,15 @@ public class HookProvider implements Loadable {
                     instance.getName(),
                     me.lokka30.treasury.api.common.service.ServicePriority.NORMAL
             );
+        }
+    }
+
+    @Override
+    public void enable() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            EconomyPlaceholder economyPlaceholder = new EconomyPlaceholder(instance);
+            economyPlaceholder.register();
+            disableTasks.add(economyPlaceholder::unregister);
         }
     }
 
