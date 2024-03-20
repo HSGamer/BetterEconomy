@@ -1,9 +1,11 @@
 package me.hsgamer.bettereconomy.command.sub;
 
+import io.github.projectunified.minelib.util.subcommand.SubCommand;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
-import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
+import me.hsgamer.bettereconomy.config.MessageConfig;
+import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import org.bukkit.Bukkit;
@@ -57,19 +59,19 @@ public abstract class ChangeMoneySubCommand extends SubCommand {
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         Optional<Double> amountOptional = Validate.getNumber(args[1]).map(BigDecimal::doubleValue).filter(value -> value >= 0);
         if (!amountOptional.isPresent()) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getInvalidAmount());
             return;
         }
         double amount = amountOptional.get();
 
         Collection<? extends OfflinePlayer> offlinePlayers = getPlayersFromSelector(sender, args[0]);
         if (offlinePlayers.isEmpty()) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getEmptyPlayerSelector());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getEmptyPlayerSelector());
             return;
         }
         for (OfflinePlayer offlinePlayer : offlinePlayers) {
-            if (!instance.getEconomyHandler().hasAccount(Utils.getUniqueId(offlinePlayer))) {
-                MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
+            if (!instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(Utils.getUniqueId(offlinePlayer))) {
+                MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
                 return;
             }
             if (tryChange(sender, offlinePlayer, amount)) {

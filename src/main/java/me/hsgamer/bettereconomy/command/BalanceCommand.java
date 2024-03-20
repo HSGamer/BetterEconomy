@@ -3,6 +3,9 @@ package me.hsgamer.bettereconomy.command;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
+import me.hsgamer.bettereconomy.config.MainConfig;
+import me.hsgamer.bettereconomy.config.MessageConfig;
+import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -32,14 +35,14 @@ public class BalanceCommand extends Command {
         } else if (sender instanceof Player) {
             uuid = ((Player) sender).getUniqueId();
         } else {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerOnly());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerOnly());
             return false;
         }
-        if (!instance.getEconomyHandler().hasAccount(uuid)) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
+        if (!instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(uuid)) {
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }
-        MessageUtils.sendMessage(sender, instance.getMessageConfig().getBalanceOutput().replace("{balance}", instance.getMainConfig().format(instance.getEconomyHandler().get(uuid))));
+        MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getBalanceOutput().replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid))));
         return true;
     }
 }

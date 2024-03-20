@@ -2,6 +2,7 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.AutoSaveEconomyHandler;
+import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.Config;
 import me.hsgamer.hscore.config.PathString;
@@ -34,7 +35,7 @@ public class FlatFileEconomyHandler extends AutoSaveEconomyHandler {
 
     @Override
     public boolean set(UUID uuid, double amount) {
-        if (amount < instance.getMainConfig().getMinimumAmount()) {
+        if (amount < instance.get(MainConfig.class).getMinimumAmount()) {
             return false;
         }
         config.set(new PathString(uuid.toString()), amount);

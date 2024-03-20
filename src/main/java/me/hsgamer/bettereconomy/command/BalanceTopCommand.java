@@ -3,7 +3,10 @@ package me.hsgamer.bettereconomy.command;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
+import me.hsgamer.bettereconomy.config.MainConfig;
+import me.hsgamer.bettereconomy.config.MessageConfig;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
+import me.hsgamer.bettereconomy.top.TopRunnable;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -28,7 +31,7 @@ public class BalanceTopCommand extends Command {
         if (!testPermission(sender)) {
             return false;
         }
-        List<PlayerBalanceSnapshot> list = instance.getTopRunnable().getTopList();
+        List<PlayerBalanceSnapshot> list = instance.get(TopRunnable.class).getTopList();
         int page = 0;
         if (args.length > 0) {
             try {
@@ -38,7 +41,7 @@ public class BalanceTopCommand extends Command {
             }
         }
         if (list.isEmpty()) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getEmptyBalanceTop());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getEmptyBalanceTop());
             return true;
         }
         int startIndex = (10 * page) % list.size();
@@ -48,10 +51,10 @@ public class BalanceTopCommand extends Command {
             OfflinePlayer offlinePlayer = Utils.getOfflinePlayer(snapshot.getUuid());
             MessageUtils.sendMessage(
                     sender,
-                    instance.getMessageConfig().getBalanceTopOutput()
+                    instance.get(MessageConfig.class).getBalanceTopOutput()
                             .replace("{place}", Integer.toString(index + 1))
                             .replace("{name}", Optional.ofNullable(offlinePlayer.getName()).orElse(Utils.getUniqueId(offlinePlayer).toString()))
-                            .replace("{balance}", instance.getMainConfig().format(snapshot.getBalance()))
+                            .replace("{balance}", instance.get(MainConfig.class).format(snapshot.getBalance()))
             );
         }
         return true;

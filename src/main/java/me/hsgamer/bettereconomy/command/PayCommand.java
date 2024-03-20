@@ -3,6 +3,10 @@ package me.hsgamer.bettereconomy.command;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
+import me.hsgamer.bettereconomy.api.EconomyHandler;
+import me.hsgamer.bettereconomy.config.MainConfig;
+import me.hsgamer.bettereconomy.config.MessageConfig;
+import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import org.bukkit.OfflinePlayer;
@@ -35,43 +39,45 @@ public class PayCommand extends Command {
             return false;
         }
         if (!(sender instanceof Player)) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerOnly());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerOnly());
             return false;
         }
+
+        EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
 
         Player player = (Player) sender;
         OfflinePlayer receiver = Utils.getOfflinePlayer(args[0]);
         if (receiver == player) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getCannotDo());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getCannotDo());
             return false;
         }
         UUID playerUUID = Utils.getUniqueId(player);
         UUID receiverUUID = Utils.getUniqueId(receiver);
-        if (!instance.getEconomyHandler().hasAccount(receiverUUID)) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerNotFound());
+        if (!economyHandler.hasAccount(receiverUUID)) {
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }
 
         Optional<Double> optionalAmount = Validate.getNumber(args[1])
                 .map(BigDecimal::doubleValue)
                 .filter(value -> value > 0)
-                .filter(value -> instance.getEconomyHandler().has(playerUUID, value));
+                .filter(value -> economyHandler.has(playerUUID, value));
         if (!optionalAmount.isPresent()) {
-            MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidAmount());
+            MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getInvalidAmount());
             return false;
         }
         double amount = optionalAmount.get();
 
-        instance.getEconomyHandler().withdraw(playerUUID, amount);
-        instance.getEconomyHandler().deposit(receiverUUID, amount);
+        economyHandler.withdraw(playerUUID, amount);
+        economyHandler.deposit(receiverUUID, amount);
         MessageUtils.sendMessage(sender,
-                instance.getMessageConfig().getGiveSuccess()
-                        .replace("{balance}", instance.getMainConfig().format(amount))
+                instance.get(MessageConfig.class).getGiveSuccess()
+                        .replace("{balance}", instance.get(MainConfig.class).format(amount))
                         .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiverUUID.toString()))
         );
         MessageUtils.sendMessage(receiverUUID,
-                instance.getMessageConfig().getReceive()
-                        .replace("{balance}", instance.getMainConfig().format(amount))
+                instance.get(MessageConfig.class).getReceive()
+                        .replace("{balance}", instance.get(MainConfig.class).format(amount))
                         .replace("{name}", player.getName())
         );
         return true;

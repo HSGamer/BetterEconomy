@@ -2,6 +2,7 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.AutoSaveEconomyHandler;
+import me.hsgamer.bettereconomy.config.MainConfig;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -70,7 +71,7 @@ public class JsonEconomyHandler extends AutoSaveEconomyHandler {
 
     @Override
     public boolean set(UUID uuid, double amount) {
-        if (amount < instance.getMainConfig().getMinimumAmount()) {
+        if (amount < instance.get(MainConfig.class).getMinimumAmount()) {
             return false;
         }
         // noinspection unchecked

@@ -1,6 +1,7 @@
 package me.hsgamer.bettereconomy.api;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.config.MainConfig;
 
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public abstract class EconomyHandler {
     public abstract boolean createAccount(UUID uuid, double startAmount);
 
     public boolean createAccount(UUID uuid) {
-        return createAccount(uuid, instance.getMainConfig().getStartAmount());
+        return createAccount(uuid, instance.get(MainConfig.class).getStartAmount());
     }
 
     public boolean deleteAccount(UUID uuid) {

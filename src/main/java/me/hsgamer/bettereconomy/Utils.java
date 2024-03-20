@@ -1,6 +1,5 @@
 package me.hsgamer.bettereconomy;
 
-import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
@@ -28,13 +27,5 @@ public final class Utils {
 
     public static UUID getUniqueId(String player) {
         return getUniqueId(getOfflinePlayer(player));
-    }
-
-    public static void schedule(Runnable runnable) {
-        Scheduler.providingPlugin(Utils.class).sync().runTask(runnable);
-    }
-
-    public static void scheduleAsync(Runnable runnable) {
-        Scheduler.providingPlugin(Utils.class).async().runTask(runnable);
     }
 }

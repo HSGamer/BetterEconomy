@@ -1,8 +1,10 @@
 package me.hsgamer.bettereconomy.api;
 
+import io.github.projectunified.minelib.scheduler.async.AsyncScheduler;
+import io.github.projectunified.minelib.scheduler.common.task.Task;
+import io.github.projectunified.minelib.scheduler.global.GlobalScheduler;
 import me.hsgamer.bettereconomy.BetterEconomy;
-import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
-import me.hsgamer.hscore.bukkit.scheduler.Task;
+import me.hsgamer.bettereconomy.config.MainConfig;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -12,12 +14,12 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler implements R
 
     protected AutoSaveEconomyHandler(BetterEconomy instance) {
         super(instance);
-        int period = instance.getMainConfig().getSaveFilePeriod();
+        int period = instance.get(MainConfig.class).getSaveFilePeriod();
         if (period >= 0) {
-            task = Scheduler.plugin(instance).async().runTaskTimer(
+            task = AsyncScheduler.get(instance).runTimer(
                     this,
-                    instance.getMainConfig().getSaveFilePeriod(),
-                    instance.getMainConfig().getSaveFilePeriod()
+                    instance.get(MainConfig.class).getSaveFilePeriod(),
+                    instance.get(MainConfig.class).getSaveFilePeriod()
             );
         }
     }
@@ -27,7 +29,7 @@ public abstract class AutoSaveEconomyHandler extends EconomyHandler implements R
         if (!needSaving.get()) {
             return;
         }
-        Scheduler.plugin(instance).sync().runTask(() -> {
+        GlobalScheduler.get(instance).run(() -> {
             this.save();
             needSaving.set(false);
         });

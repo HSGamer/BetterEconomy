@@ -1,6 +1,7 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.hscore.bukkit.utils.BukkitUtils;
 import me.lokka30.treasury.api.common.NamespacedKey;
 import me.lokka30.treasury.api.common.misc.FutureHelper;
@@ -35,7 +36,7 @@ public class TreasuryEconomyHook implements EconomyProvider {
     @Override
     public @NotNull CompletableFuture<Boolean> hasAccount(@NotNull AccountData accountData) {
         if (accountData.isPlayerAccount()) {
-            return CompletableFuture.supplyAsync(() -> instance.getEconomyHandler().hasAccount(accountData.getPlayerIdentifier().get()));
+            return CompletableFuture.supplyAsync(() -> instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(accountData.getPlayerIdentifier().get()));
         } else {
             return FutureHelper.failedFuture(FailureReasons.FEATURE_NOT_SUPPORTED.toException());
         }
@@ -45,7 +46,7 @@ public class TreasuryEconomyHook implements EconomyProvider {
     public @NotNull CompletableFuture<Collection<UUID>> retrievePlayerAccountIds() {
         return CompletableFuture.supplyAsync(() -> BukkitUtils.getAllUniqueIds()
                 .parallelStream()
-                .filter(uuid -> instance.getEconomyHandler().hasAccount(uuid))
+                .filter(uuid -> instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(uuid))
                 .collect(Collectors.toList()));
     }
 

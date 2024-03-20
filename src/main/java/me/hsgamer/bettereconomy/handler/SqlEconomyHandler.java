@@ -2,6 +2,7 @@ package me.hsgamer.bettereconomy.handler;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
+import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.hscore.database.Setting;
 import me.hsgamer.hscore.database.client.sql.SqlClient;
 import me.hsgamer.hscore.database.client.sql.StatementBuilder;
@@ -23,8 +24,8 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
         super(instance);
 
         setting
-                .setClientProperties(instance.getMainConfig().getDatabaseClientSettings())
-                .setDriverProperties(instance.getMainConfig().getDatabaseDriverSettings());
+                .setClientProperties(instance.get(MainConfig.class).getDatabaseClientSettings())
+                .setDriverProperties(instance.get(MainConfig.class).getDatabaseDriverSettings());
 
         try {
             client = new JavaSqlClient(setting);
@@ -70,7 +71,7 @@ public abstract class SqlEconomyHandler extends EconomyHandler {
 
     @Override
     public boolean set(UUID uuid, double amount) {
-        if (amount < instance.getMainConfig().getMinimumAmount()) {
+        if (amount < instance.get(MainConfig.class).getMinimumAmount()) {
             return false;
         } else {
             return StatementBuilder.create(getConnection())

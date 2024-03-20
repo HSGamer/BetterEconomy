@@ -1,8 +1,10 @@
 package me.hsgamer.bettereconomy.command.sub;
 
+import io.github.projectunified.minelib.util.subcommand.SubCommand;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
-import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
+import me.hsgamer.bettereconomy.config.MainConfig;
+import me.hsgamer.bettereconomy.config.MessageConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +22,9 @@ public class ReloadSubCommand extends SubCommand {
 
     @Override
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
-        instance.getMainConfig().reloadConfig();
-        instance.getMessageConfig().reloadConfig();
-        MessageUtils.sendMessage(sender, instance.getMessageConfig().getSuccess());
+        instance.get(MainConfig.class).reloadConfig();
+        instance.get(MessageConfig.class).reloadConfig();
+        MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getSuccess());
     }
 
     @Override

@@ -1,8 +1,13 @@
 package me.hsgamer.bettereconomy.hook.placeholderapi;
 
+import io.github.projectunified.minelib.plugin.base.Loadable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.api.EconomyHandler;
+import me.hsgamer.bettereconomy.config.MainConfig;
+import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
+import me.hsgamer.bettereconomy.top.TopRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 
-public class EconomyPlaceholder extends PlaceholderExpansion {
+public class EconomyPlaceholder extends PlaceholderExpansion implements Loadable {
     private final BetterEconomy instance;
 
     public EconomyPlaceholder(BetterEconomy instance) {
@@ -41,12 +46,13 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean register() {
-        boolean registered = super.register();
-        if (registered) {
-            instance.addDisableFunction(this::unregister);
-        }
-        return registered;
+    public void enable() {
+        register();
+    }
+
+    @Override
+    public void disable() {
+        unregister();
     }
 
     @Override
@@ -68,7 +74,7 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
                 function = snapshot -> snapshot.getUuid().toString();
             } else if (query.startsWith("balance_formatted_")) {
                 index = query.substring(18);
-                function = snapshot -> instance.getMainConfig().format(snapshot.getBalance());
+                function = snapshot -> instance.get(MainConfig.class).format(snapshot.getBalance());
             } else if (query.startsWith("balance_")) {
                 index = query.substring(8);
                 function = snapshot -> String.valueOf(snapshot.getBalance());
@@ -76,7 +82,7 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
                 return null;
             }
 
-            List<PlayerBalanceSnapshot> top = instance.getTopRunnable().getTopList();
+            List<PlayerBalanceSnapshot> top = instance.get(TopRunnable.class).getTopList();
             int i;
             try {
                 i = Integer.parseInt(index);
@@ -91,13 +97,14 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
 
         if (player == null) return null;
 
+        EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
         switch (lower) {
             case "balance":
-                return String.valueOf(instance.getEconomyHandler().get(player.getUniqueId()));
+                return String.valueOf(economyHandler.get(player.getUniqueId()));
             case "balance_formatted":
-                return instance.getMainConfig().format(instance.getEconomyHandler().get(player.getUniqueId()));
+                return instance.get(MainConfig.class).format(economyHandler.get(player.getUniqueId()));
             case "top":
-                return String.valueOf(instance.getTopRunnable().getTopIndex(player.getUniqueId()) + 1);
+                return String.valueOf(instance.get(TopRunnable.class).getTopIndex(player.getUniqueId()) + 1);
         }
 
         return null;

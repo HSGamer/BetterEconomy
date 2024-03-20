@@ -1,6 +1,7 @@
 package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
+import me.hsgamer.bettereconomy.config.MainConfig;
 import me.lokka30.treasury.api.common.misc.FutureHelper;
 import me.lokka30.treasury.api.economy.account.Account;
 import me.lokka30.treasury.api.economy.currency.Currency;
@@ -27,31 +28,31 @@ public class TreasuryCurrency implements Currency {
 
     @Override
     public @NotNull String getSymbol() {
-        return instance.getMainConfig().getCurrencySymbol();
+        return instance.get(MainConfig.class).getCurrencySymbol();
     }
 
     @Override
     public char getDecimal(@Nullable Locale locale) {
-        return instance.getMainConfig().getActualDecimalPoint();
+        return instance.get(MainConfig.class).getActualDecimalPoint();
     }
 
     @Override
     public @NotNull Map<Locale, Character> getLocaleDecimalMap() {
-        return Collections.singletonMap(Locale.getDefault(), instance.getMainConfig().getActualDecimalPoint());
+        return Collections.singletonMap(Locale.getDefault(), instance.get(MainConfig.class).getActualDecimalPoint());
     }
 
     @Override
     public @NotNull String getDisplayName(@NotNull BigDecimal value, @Nullable Locale locale) {
         if (value.compareTo(BigDecimal.ONE) <= 0) {
-            return instance.getMainConfig().getCurrencySingular();
+            return instance.get(MainConfig.class).getCurrencySingular();
         } else {
-            return instance.getMainConfig().getCurrencyPlural();
+            return instance.get(MainConfig.class).getCurrencyPlural();
         }
     }
 
     @Override
     public int getPrecision() {
-        return instance.getMainConfig().getFractionalDigits();
+        return instance.get(MainConfig.class).getFractionalDigits();
     }
 
     @Override
@@ -61,7 +62,7 @@ public class TreasuryCurrency implements Currency {
 
     @Override
     public @NotNull BigDecimal getStartingBalance(@NotNull Account account) {
-        return BigDecimal.valueOf(instance.getMainConfig().getStartAmount());
+        return BigDecimal.valueOf(instance.get(MainConfig.class).getStartAmount());
     }
 
     @Override
@@ -131,22 +132,22 @@ public class TreasuryCurrency implements Currency {
             return currency.charAt(0) == getDecimal(locale);
         } else {
             return currency.equalsIgnoreCase(getSymbol())
-                    || currency.equalsIgnoreCase(instance.getMainConfig().getCurrencySingular())
-                    || currency.equalsIgnoreCase(instance.getMainConfig().getCurrencyPlural());
+                    || currency.equalsIgnoreCase(instance.get(MainConfig.class).getCurrencySingular())
+                    || currency.equalsIgnoreCase(instance.get(MainConfig.class).getCurrencyPlural());
         }
     }
 
     private boolean isSeparator(char c, @Nullable Locale locale) {
-        return c == getDecimal(locale) || c == instance.getMainConfig().getActualThousandsSeparator();
+        return c == getDecimal(locale) || c == instance.get(MainConfig.class).getActualThousandsSeparator();
     }
 
     @Override
     public @NotNull String format(@NotNull BigDecimal amount, @Nullable Locale locale) {
-        return instance.getMainConfig().format(amount);
+        return instance.get(MainConfig.class).format(amount);
     }
 
     @Override
     public @NotNull String format(@NotNull BigDecimal amount, @Nullable Locale locale, int precision) {
-        return instance.getMainConfig().format(amount, precision);
+        return instance.get(MainConfig.class).format(amount, precision);
     }
 }
