@@ -15,11 +15,6 @@ public interface MainConfig {
         return "file";
     }
 
-    @ConfigPath("hook-enabled")
-    default boolean isHookEnabled() {
-        return true;
-    }
-
     @ConfigPath({"currency", "singular"})
     default String getCurrencySingular() {
         return "$";

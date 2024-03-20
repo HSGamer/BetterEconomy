@@ -1,6 +1,5 @@
 package me.hsgamer.bettereconomy.hook.placeholderapi;
 
-import io.github.projectunified.minelib.plugin.base.Loadable;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Function;
 
-public class EconomyPlaceholder extends PlaceholderExpansion implements Loadable {
+public class EconomyPlaceholder extends PlaceholderExpansion {
     private final BetterEconomy instance;
 
     public EconomyPlaceholder(BetterEconomy instance) {
@@ -43,16 +42,6 @@ public class EconomyPlaceholder extends PlaceholderExpansion implements Loadable
     @Override
     public boolean persist() {
         return true;
-    }
-
-    @Override
-    public void enable() {
-        register();
-    }
-
-    @Override
-    public void disable() {
-        unregister();
     }
 
     @Override
