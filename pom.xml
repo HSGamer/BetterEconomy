@@ -94,10 +94,6 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>other-developers</id>
-            <url>https://repo.mrivanplays.com/repository/other-developers/</url>
-        </repository>
-        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
