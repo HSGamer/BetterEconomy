@@ -14,8 +14,8 @@
     <description>A simple Economy plugin</description>
     <properties>
         <java.version>1.8</java.version>
-        <minelib.version>1.2.0</minelib.version>
-        <core.version>4.4.1</core.version>
+        <minelib.version>1.2.1</minelib.version>
+        <core.version>4.4.2</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
