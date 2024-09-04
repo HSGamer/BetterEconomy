@@ -13,10 +13,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class BalanceCommand extends Command {
     private final BetterEconomy instance;
+    private String output;
 
     public BalanceCommand(BetterEconomy instance) {
         super("balance", "Get the balance of a player", "/balance [player]", Collections.singletonList("bal"));
@@ -41,12 +44,16 @@ public class BalanceCommand extends Command {
         if (!instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(uuid)) {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
+
         }
-        MessageUtils.sendMessage(sender,
-                instance.get(MessageConfig.class).getBalanceOutput()
-                        .replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid)))
-                        .replace("{name}", Optional.ofNullable(args[0]).orElse(uuid.toString()))
+
+        MessageConfig messageConfig = instance.get(MessageConfig.class);
+        if (uuid.equals(((Player) sender).getUniqueId())) { output = messageConfig.getBalanceOutput(); } else { output = messageConfig.getBalanceOther(); }
+
+        MessageUtils.sendMessage(sender, output
+                .replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid)))
+                .replace("{name}", Objects.requireNonNull(Utils.getOfflinePlayer(uuid).getName()))
         );
-        return true;
+        return false;
     }
 }

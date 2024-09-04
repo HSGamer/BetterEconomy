@@ -23,6 +23,11 @@ public interface MessageConfig {
         return "&cNo player is selected";
     }
 
+    @ConfigPath("balance-other")
+    default String getBalanceOther() {
+        return "&eBalance of {name}: &f{balance}";
+    }
+
     @ConfigPath("balance-output")
     default String getBalanceOutput() {
         return "&eBalance: &f{balance}";
