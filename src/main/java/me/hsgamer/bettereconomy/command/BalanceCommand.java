@@ -42,7 +42,11 @@ public class BalanceCommand extends Command {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }
-        MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getBalanceOutput().replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid))));
+        MessageUtils.sendMessage(sender,
+                instance.get(MessageConfig.class).getBalanceOutput()
+                        .replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid)))
+                        .replace("{name}", Optional.ofNullable(args[0]).orElse(uuid.toString()))
+        );
         return true;
     }
 }
