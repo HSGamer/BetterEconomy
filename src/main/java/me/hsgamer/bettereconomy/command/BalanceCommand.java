@@ -14,12 +14,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 public class BalanceCommand extends Command {
     private final BetterEconomy instance;
-    private String output;
 
     public BalanceCommand(BetterEconomy instance) {
         super("balance", "Get the balance of a player", "/balance [player]", Collections.singletonList("bal"));
@@ -46,7 +44,7 @@ public class BalanceCommand extends Command {
             return false;
 
         }
-
+        String output;
         MessageConfig messageConfig = instance.get(MessageConfig.class);
         if (uuid.equals(((Player) sender).getUniqueId())) { output = messageConfig.getBalanceOutput(); } else { output = messageConfig.getBalanceOther(); }
 
