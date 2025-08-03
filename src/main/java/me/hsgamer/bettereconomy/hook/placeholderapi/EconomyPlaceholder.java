@@ -1,5 +1,15 @@
 package me.hsgamer.bettereconomy.hook.placeholderapi;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.api.EconomyHandler;
@@ -7,15 +17,6 @@ import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
 import me.hsgamer.bettereconomy.top.PlayerBalanceSnapshot;
 import me.hsgamer.bettereconomy.top.TopRunnable;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Function;
 
 public class EconomyPlaceholder extends PlaceholderExpansion {
     private final BetterEconomy instance;
@@ -84,7 +85,8 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
             return function.apply(top.get(i - 1));
         }
 
-        if (player == null) return null;
+        if (player == null)
+            return null;
 
         EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
         switch (lower) {
@@ -92,6 +94,8 @@ public class EconomyPlaceholder extends PlaceholderExpansion {
                 return String.valueOf(economyHandler.get(player.getUniqueId()));
             case "balance_formatted":
                 return instance.get(MainConfig.class).format(economyHandler.get(player.getUniqueId()));
+            case "balance_formatted_short":
+                return instance.get(MainConfig.class).formatShort(economyHandler.get(player.getUniqueId()));
             case "top":
                 return String.valueOf(instance.get(TopRunnable.class).getTopIndex(player.getUniqueId()) + 1);
         }

@@ -1,8 +1,8 @@
 package me.hsgamer.bettereconomy.top;
 
-import lombok.Data;
-
 import java.util.UUID;
+
+import lombok.Data;
 
 @Data
 public class PlayerBalanceSnapshot {
