@@ -14,8 +14,8 @@
     <description>A simple Economy plugin</description>
     <properties>
         <java.version>1.8</java.version>
-        <minelib.version>1.2.2</minelib.version>
-        <core.version>4.4.2</core.version>
+        <minelib.version>1.2.5</minelib.version>
+        <core.version>4.6.0</core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -106,8 +106,8 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <id>helpchat-repo-releases</id>
+            <url>https://repo.helpch.at/releases</url>
         </repository>
     </repositories>
 
