@@ -31,33 +31,16 @@ import java.util.*;
 
 public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements AgentHolder<UUID, Double>, Loadable {
     private final BetterEconomy instance;
-    private final List<Agent> agents;
-    private final List<DataEntryAgent<UUID, Double>> entryAgents;
+    private final List<Agent> agents = new ArrayList<>();
+    private final List<DataEntryAgent<UUID, Double>> entryAgents = new ArrayList<>();
 
     @Getter
-    private final StorageAgent<UUID, Double> storageAgent;
+    private StorageAgent<UUID, Double> storageAgent;
     @Getter
-    private final SnapshotAgent<UUID, Double> snapshotAgent;
+    private SnapshotAgent<UUID, Double> snapshotAgent;
 
     public EconomyHolder(BetterEconomy instance) {
         this.instance = instance;
-
-        storageAgent = new StorageAgent<>(getStorage());
-        snapshotAgent = SnapshotAgent.create(this);
-        snapshotAgent.setComparator(Comparator.reverseOrder());
-
-        agents = Arrays.asList(
-                storageAgent,
-                snapshotAgent,
-
-                storageAgent.getLoadAgent(this),
-
-                new SpigotRunnableAgent(storageAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getSaveFilePeriod()),
-                new SpigotRunnableAgent(snapshotAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getUpdateBalanceTopPeriod())
-        );
-        entryAgents = Collections.singletonList(
-                storageAgent
-        );
     }
 
     private DataStorage<UUID, Double> getStorage() {
@@ -115,6 +98,20 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     @Override
     public @Nullable Double getDefaultValue() {
         return instance.get(MainConfig.class).getStartAmount();
+    }
+
+    @Override
+    public void load() {
+        storageAgent = new StorageAgent<>(getStorage());
+        agents.add(storageAgent);
+        entryAgents.add(storageAgent);
+        agents.add(storageAgent.getLoadAgent(this));
+        agents.add(new SpigotRunnableAgent(storageAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getSaveFilePeriod()));
+
+        snapshotAgent = SnapshotAgent.create(this);
+        snapshotAgent.setComparator(Comparator.reverseOrder());
+        agents.add(snapshotAgent);
+        agents.add(new SpigotRunnableAgent(snapshotAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getUpdateBalanceTopPeriod()));
     }
 
     @Override
