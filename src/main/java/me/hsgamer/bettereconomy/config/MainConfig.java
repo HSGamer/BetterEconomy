@@ -1,6 +1,8 @@
 package me.hsgamer.bettereconomy.config;
 
+import me.hsgamer.bettereconomy.config.converter.StringObjectMapConverter;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
+import me.hsgamer.topper.storage.sql.core.SqlDatabaseSetting;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -95,17 +97,22 @@ public interface MainConfig {
         return "";
     }
 
+    @ConfigPath(value = {"database", "mysql", "ssl"}, priority = 4)
+    default boolean isMysqlSSL() {
+        return false;
+    }
+
     @ConfigPath(value = {"database", "sqlite", "dbname"}, priority = 3)
     default String getSqliteDatabaseName() {
         return "balances";
     }
 
-    @ConfigPath(value = {"database", "common", "client-settings"}, priority = 3)
+    @ConfigPath(value = {"database", "common", "client-settings"}, converter = StringObjectMapConverter.class, priority = 3)
     default Map<String, Object> getDatabaseClientSettings() {
         return Collections.emptyMap();
     }
 
-    @ConfigPath(value = {"database", "common", "driver-settings"}, priority = 3)
+    @ConfigPath(value = {"database", "common", "driver-settings"}, converter = StringObjectMapConverter.class, priority = 3)
     default Map<String, Object> getDatabaseDriverSettings() {
         return Collections.emptyMap();
     }
@@ -142,5 +149,49 @@ public interface MainConfig {
     default char getActualThousandsSeparator() {
         String separator = getThousandsSeparator().trim();
         return separator.isEmpty() ? ',' : separator.charAt(0);
+    }
+
+    default SqlDatabaseSetting getSqlDatabaseSetting() {
+        return new SqlDatabaseSetting() {
+            @Override
+            public String getHost() {
+                return getMysqlHost();
+            }
+
+            @Override
+            public String getPort() {
+                return getMysqlPort();
+            }
+
+            @Override
+            public String getDatabase() {
+                return getMysqlDatabaseName();
+            }
+
+            @Override
+            public String getUsername() {
+                return getMysqlUsername();
+            }
+
+            @Override
+            public String getPassword() {
+                return getMysqlPassword();
+            }
+
+            @Override
+            public boolean isUseSSL() {
+                return isMysqlSSL();
+            }
+
+            @Override
+            public Map<String, Object> getDriverProperties() {
+                return getDatabaseDriverSettings();
+            }
+
+            @Override
+            public Map<String, Object> getClientProperties() {
+                return getDatabaseClientSettings();
+            }
+        };
     }
 }

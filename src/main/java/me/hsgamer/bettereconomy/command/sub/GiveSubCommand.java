@@ -4,7 +4,7 @@ import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
-import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
+import me.hsgamer.bettereconomy.holder.EconomyHolder;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,7 @@ public class GiveSubCommand extends ChangeMoneySubCommand {
 
     @Override
     protected boolean tryChange(CommandSender sender, OfflinePlayer offlinePlayer, double amount) {
-        return instance.get(EconomyHandlerProvider.class).getEconomyHandler().deposit(Utils.getUniqueId(offlinePlayer), amount);
+        return instance.get(EconomyHolder.class).deposit(Utils.getUniqueId(offlinePlayer), amount);
     }
 
     @Override

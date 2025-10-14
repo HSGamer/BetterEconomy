@@ -5,7 +5,7 @@ import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
-import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
+import me.hsgamer.bettereconomy.holder.EconomyHolder;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,11 +38,11 @@ public class BalanceCommand extends Command {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerOnly());
             return false;
         }
-        if (!instance.get(EconomyHandlerProvider.class).getEconomyHandler().hasAccount(uuid)) {
+        if (!instance.get(EconomyHolder.class).hasAccount(uuid)) {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }
-        MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getBalanceOutput().replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid))));
+        MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getBalanceOutput().replace("{balance}", instance.get(MainConfig.class).format(instance.get(EconomyHolder.class).get(uuid))));
         return true;
     }
 }

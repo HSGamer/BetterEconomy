@@ -2,8 +2,7 @@ package me.hsgamer.bettereconomy.hook.treasury;
 
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Utils;
-import me.hsgamer.bettereconomy.api.EconomyHandler;
-import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
+import me.hsgamer.bettereconomy.holder.EconomyHolder;
 import me.lokka30.treasury.api.common.misc.FutureHelper;
 import me.lokka30.treasury.api.economy.account.PlayerAccount;
 import me.lokka30.treasury.api.economy.currency.Currency;
@@ -43,7 +42,7 @@ public class TreasuryAccount implements PlayerAccount {
         if (!currency.getIdentifier().equals(TreasuryEconomyHook.CURRENCY_IDENTIFIER)) {
             return FutureHelper.failedFuture(FailureReasons.CURRENCY_NOT_FOUND.toException());
         } else {
-            return CompletableFuture.supplyAsync(() -> BigDecimal.valueOf(instance.get(EconomyHandlerProvider.class).getEconomyHandler().get(uuid)));
+            return CompletableFuture.supplyAsync(() -> BigDecimal.valueOf(instance.get(EconomyHolder.class).get(uuid)));
         }
     }
 
@@ -59,24 +58,24 @@ public class TreasuryAccount implements PlayerAccount {
             if (amountDouble < 0) {
                 throw FailureReasons.NEGATIVE_BALANCES_NOT_SUPPORTED.toException();
             }
-            EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
+            EconomyHolder holder = instance.get(EconomyHolder.class);
             boolean status = false;
             if (type == EconomyTransactionType.DEPOSIT) {
-                status = economyHandler.deposit(uuid, amountDouble);
+                status = holder.deposit(uuid, amountDouble);
             } else if (type == EconomyTransactionType.WITHDRAWAL) {
-                status = economyHandler.withdraw(uuid, amountDouble);
+                status = holder.withdraw(uuid, amountDouble);
             }
             if (!status) {
                 throw FailureReasons.NEGATIVE_BALANCES_NOT_SUPPORTED.toException();
             } else {
-                return BigDecimal.valueOf(economyHandler.get(uuid));
+                return BigDecimal.valueOf(holder.get(uuid));
             }
         });
     }
 
     @Override
     public @NotNull CompletableFuture<Boolean> deleteAccount() {
-        return CompletableFuture.supplyAsync(() -> instance.get(EconomyHandlerProvider.class).getEconomyHandler().deleteAccount(uuid));
+        return CompletableFuture.completedFuture(false);
     }
 
     @Override

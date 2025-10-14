@@ -3,10 +3,9 @@ package me.hsgamer.bettereconomy.command;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.Permissions;
 import me.hsgamer.bettereconomy.Utils;
-import me.hsgamer.bettereconomy.api.EconomyHandler;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.bettereconomy.config.MessageConfig;
-import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
+import me.hsgamer.bettereconomy.holder.EconomyHolder;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import org.bukkit.OfflinePlayer;
@@ -43,7 +42,7 @@ public class PayCommand extends Command {
             return false;
         }
 
-        EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
+        EconomyHolder holder = instance.get(EconomyHolder.class);
 
         Player player = (Player) sender;
         OfflinePlayer receiver = Utils.getOfflinePlayer(args[0]);
@@ -53,7 +52,7 @@ public class PayCommand extends Command {
         }
         UUID playerUUID = Utils.getUniqueId(player);
         UUID receiverUUID = Utils.getUniqueId(receiver);
-        if (!economyHandler.hasAccount(receiverUUID)) {
+        if (!holder.hasAccount(receiverUUID)) {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }
@@ -61,15 +60,15 @@ public class PayCommand extends Command {
         Optional<Double> optionalAmount = Validate.getNumber(args[1])
                 .map(BigDecimal::doubleValue)
                 .filter(value -> value > 0)
-                .filter(value -> economyHandler.has(playerUUID, value));
+                .filter(value -> holder.has(playerUUID, value));
         if (!optionalAmount.isPresent()) {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getInvalidAmount());
             return false;
         }
         double amount = optionalAmount.get();
 
-        economyHandler.withdraw(playerUUID, amount);
-        economyHandler.deposit(receiverUUID, amount);
+        holder.withdraw(playerUUID, amount);
+        holder.deposit(receiverUUID, amount);
         MessageUtils.sendMessage(sender,
                 instance.get(MessageConfig.class).getGiveSuccess()
                         .replace("{balance}", instance.get(MainConfig.class).format(amount))

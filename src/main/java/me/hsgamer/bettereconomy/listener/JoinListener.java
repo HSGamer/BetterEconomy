@@ -2,13 +2,10 @@ package me.hsgamer.bettereconomy.listener;
 
 import io.github.projectunified.minelib.plugin.listener.ListenerComponent;
 import me.hsgamer.bettereconomy.BetterEconomy;
-import me.hsgamer.bettereconomy.api.EconomyHandler;
-import me.hsgamer.bettereconomy.provider.EconomyHandlerProvider;
+import me.hsgamer.bettereconomy.holder.EconomyHolder;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
 
 public class JoinListener implements ListenerComponent {
     private final BetterEconomy instance;
@@ -24,10 +21,6 @@ public class JoinListener implements ListenerComponent {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
-        EconomyHandler economyHandler = instance.get(EconomyHandlerProvider.class).getEconomyHandler();
-        if (!economyHandler.hasAccount(uuid)) {
-            economyHandler.createAccount(uuid);
-        }
+        instance.get(EconomyHolder.class).getOrCreateEntry(event.getPlayer().getUniqueId());
     }
 }
