@@ -14,6 +14,7 @@ import me.hsgamer.topper.agent.core.AgentHolder;
 import me.hsgamer.topper.agent.core.DataEntryAgent;
 import me.hsgamer.topper.agent.snapshot.SnapshotAgent;
 import me.hsgamer.topper.agent.storage.StorageAgent;
+import me.hsgamer.topper.data.core.DataEntry;
 import me.hsgamer.topper.data.simple.SimpleDataHolder;
 import me.hsgamer.topper.spigot.agent.runnable.SpigotRunnableAgent;
 import me.hsgamer.topper.storage.core.DataStorage;
@@ -41,6 +42,12 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
 
     public EconomyHolder(BetterEconomy instance) {
         this.instance = instance;
+        entryAgents.add(new DataEntryAgent<UUID, Double>() {
+            @Override
+            public void onCreate(DataEntry<UUID, Double> entry) {
+                entry.setValue(instance.get(MainConfig.class).getStartAmount(), true);
+            }
+        });
     }
 
     private DataStorage<UUID, Double> getStorage() {
@@ -97,7 +104,7 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
 
     @Override
     public @Nullable Double getDefaultValue() {
-        return instance.get(MainConfig.class).getStartAmount();
+        return 0D;
     }
 
     @Override
