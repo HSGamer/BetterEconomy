@@ -51,11 +51,11 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
         NumberSqlValueConverter<Double> sqlValueConverter = new NumberSqlValueConverter<>("balance", true, Number::doubleValue);
         switch (type.toLowerCase(Locale.ROOT)) {
             case "mysql": {
-                MySqlDataStorageSupplier supplier = new MySqlDataStorageSupplier(instance.get(MainConfig.class).getSqlDatabaseSetting(), JavaSqlClient::new);
+                MySqlDataStorageSupplier supplier = new MySqlDataStorageSupplier(instance.get(MainConfig.class).getSqlDatabaseSetting(false), JavaSqlClient::new);
                 return supplier.getStorage("economy", sqlKeyConverter, sqlValueConverter);
             }
             case "sqlite": {
-                SqliteDataStorageSupplier supplier = new SqliteDataStorageSupplier(instance.getDataFolder(), instance.get(MainConfig.class).getSqlDatabaseSetting(), JavaSqlClient::new);
+                SqliteDataStorageSupplier supplier = new SqliteDataStorageSupplier(instance.getDataFolder(), instance.get(MainConfig.class).getSqlDatabaseSetting(true), JavaSqlClient::new);
                 return supplier.getStorage("economy", sqlKeyConverter, sqlValueConverter);
             }
             case "json":

@@ -151,7 +151,7 @@ public interface MainConfig {
         return separator.isEmpty() ? ',' : separator.charAt(0);
     }
 
-    default SqlDatabaseSetting getSqlDatabaseSetting() {
+    default SqlDatabaseSetting getSqlDatabaseSetting(boolean sqlite) {
         return new SqlDatabaseSetting() {
             @Override
             public String getHost() {
@@ -165,7 +165,7 @@ public interface MainConfig {
 
             @Override
             public String getDatabase() {
-                return getMysqlDatabaseName();
+                return sqlite ? getSqliteDatabaseName() : getMysqlDatabaseName();
             }
 
             @Override
