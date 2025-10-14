@@ -25,7 +25,6 @@ import me.hsgamer.topper.storage.sql.converter.NumberSqlValueConverter;
 import me.hsgamer.topper.storage.sql.converter.UUIDSqlValueConverter;
 import me.hsgamer.topper.storage.sql.mysql.MySqlDataStorageSupplier;
 import me.hsgamer.topper.storage.sql.sqlite.SqliteDataStorageSupplier;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -103,11 +102,6 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     }
 
     @Override
-    public @Nullable Double getDefaultValue() {
-        return 0D;
-    }
-
-    @Override
     public void load() {
         storageAgent = new StorageAgent<>(getStorage());
         agents.add(storageAgent);
@@ -117,6 +111,7 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
 
         snapshotAgent = SnapshotAgent.create(this);
         snapshotAgent.setComparator(Comparator.reverseOrder());
+        snapshotAgent.setFilter(entry -> entry.getValue() != null);
         agents.add(snapshotAgent);
         agents.add(new SpigotRunnableAgent(snapshotAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getUpdateBalanceTopPeriod()));
     }
@@ -136,14 +131,22 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     }
 
     public boolean hasAccount(UUID uuid) {
-        return getEntry(uuid).isPresent();
+        return getOrCreateEntry(uuid).getValue() != null;
     }
 
     public boolean createAccount(UUID uuid) {
         if (hasAccount(uuid)) {
             return false;
         }
-        getOrCreateEntry(uuid);
+        getOrCreateEntry(uuid).setValue(instance.get(MainConfig.class).getStartAmount());
+        return true;
+    }
+
+    public boolean deleteAccount(UUID uuid) {
+        if (!hasAccount(uuid)) {
+            return false;
+        }
+        getOrCreateEntry(uuid).setValue((Double) null);
         return true;
     }
 

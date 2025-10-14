@@ -52,7 +52,7 @@ public class PayCommand extends Command {
         }
         UUID playerUUID = Utils.getUniqueId(player);
         UUID receiverUUID = Utils.getUniqueId(receiver);
-        if (!holder.hasAccount(receiverUUID)) {
+        if (!holder.hasAccount(playerUUID) || !holder.hasAccount(receiverUUID)) {
             MessageUtils.sendMessage(sender, instance.get(MessageConfig.class).getPlayerNotFound());
             return false;
         }

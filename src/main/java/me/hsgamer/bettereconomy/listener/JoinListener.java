@@ -21,6 +21,6 @@ public class JoinListener implements ListenerComponent {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        instance.get(EconomyHolder.class).getOrCreateEntry(event.getPlayer().getUniqueId());
+        instance.get(EconomyHolder.class).createAccount(event.getPlayer().getUniqueId());
     }
 }

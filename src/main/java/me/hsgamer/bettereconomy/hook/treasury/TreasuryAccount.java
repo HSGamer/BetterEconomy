@@ -75,7 +75,7 @@ public class TreasuryAccount implements PlayerAccount {
 
     @Override
     public @NotNull CompletableFuture<Boolean> deleteAccount() {
-        return CompletableFuture.completedFuture(false);
+        return CompletableFuture.supplyAsync(() -> instance.get(EconomyHolder.class).deleteAccount(uuid));
     }
 
     @Override
