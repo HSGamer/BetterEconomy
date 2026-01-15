@@ -142,7 +142,7 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
         if (!hasAccount(uuid)) {
             return false;
         }
-        getOrCreateEntry(uuid).setValue((Double) null);
+        getEntry(uuid).ifPresent(entry -> entry.setValue((Double) null));
         return true;
     }
 
