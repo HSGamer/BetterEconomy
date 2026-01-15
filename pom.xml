@@ -6,7 +6,7 @@
 
     <groupId>me.hsgamer</groupId>
     <artifactId>bettereconomy</artifactId>
-    <version>4.2-SNAPSHOT</version>
+    <version>4.2</version>
     <packaging>jar</packaging>
 
     <name>BetterEconomy</name>
