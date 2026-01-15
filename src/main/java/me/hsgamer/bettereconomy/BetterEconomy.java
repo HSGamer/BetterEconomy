@@ -22,10 +22,11 @@ import java.util.List;
 public final class BetterEconomy extends BasePlugin {
     @Override
     protected List<Object> getComponents() {
+        MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this));
         return Arrays.asList(
-                ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this)),
+                mainConfig,
                 ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml")),
-                new EconomyHolder(this),
+                new EconomyHolder(this, mainConfig),
                 new Permissions(this),
                 new CommandComponent(this,
                         new BalanceCommand(this),

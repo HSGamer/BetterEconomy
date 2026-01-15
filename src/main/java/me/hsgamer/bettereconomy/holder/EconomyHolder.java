@@ -2,7 +2,6 @@ package me.hsgamer.bettereconomy.holder;
 
 import io.github.projectunified.minelib.plugin.base.Loadable;
 import io.github.projectunified.minelib.scheduler.async.AsyncScheduler;
-import lombok.Getter;
 import me.hsgamer.bettereconomy.BetterEconomy;
 import me.hsgamer.bettereconomy.config.MainConfig;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
@@ -31,37 +30,49 @@ import java.util.*;
 
 public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements AgentHolder<UUID, Double>, Loadable {
     private final BetterEconomy instance;
-    private final List<Agent> agents = new ArrayList<>();
-    private final List<DataEntryAgent<UUID, Double>> entryAgents = new ArrayList<>();
+    private final MainConfig mainConfig;
+    private final List<Agent> agents;
+    private final List<DataEntryAgent<UUID, Double>> entryAgents;
 
-    @Getter
-    private StorageAgent<UUID, Double> storageAgent;
-    @Getter
-    private SnapshotAgent<UUID, Double> snapshotAgent;
+    private final StorageAgent<UUID, Double> storageAgent;
+    private final SnapshotAgent<UUID, Double> snapshotAgent;
 
-    public EconomyHolder(BetterEconomy instance) {
+    public EconomyHolder(BetterEconomy instance, MainConfig mainConfig) {
         this.instance = instance;
-        entryAgents.add(new DataEntryAgent<UUID, Double>() {
-            @Override
-            public void onCreate(DataEntry<UUID, Double> entry) {
-                entry.setValue(instance.get(MainConfig.class).getStartAmount(), true);
-            }
-        });
+        this.mainConfig = mainConfig;
+
+        storageAgent = new StorageAgent<>(getStorage());
+        snapshotAgent = SnapshotAgent.create(this);
+        snapshotAgent.setComparator(Comparator.reverseOrder());
+        snapshotAgent.setFilter(entry -> entry.getValue() != null);
+
+        this.agents = Arrays.asList(
+                storageAgent,
+                storageAgent.getLoadAgent(this),
+                new SpigotRunnableAgent(storageAgent, AsyncScheduler.get(instance), mainConfig.getSaveFilePeriod()),
+
+                snapshotAgent,
+                new SpigotRunnableAgent(snapshotAgent, AsyncScheduler.get(instance), mainConfig.getUpdateBalanceTopPeriod())
+
+        );
+        this.entryAgents = Collections.singletonList(
+                storageAgent
+        );
     }
 
     private DataStorage<UUID, Double> getStorage() {
-        String type = instance.get(MainConfig.class).getHandlerType();
+        String type = mainConfig.getHandlerType();
         UUIDFlatValueConverter keyConverter = new UUIDFlatValueConverter();
         NumberFlatValueConverter<Double> valueConverter = new NumberFlatValueConverter<>(Number::doubleValue);
         UUIDSqlValueConverter sqlKeyConverter = new UUIDSqlValueConverter("uuid");
         NumberSqlValueConverter<Double> sqlValueConverter = new NumberSqlValueConverter<>("balance", true, Number::doubleValue);
         switch (type.toLowerCase(Locale.ROOT)) {
             case "mysql": {
-                MySqlDataStorageSupplier supplier = new MySqlDataStorageSupplier(instance.get(MainConfig.class).getSqlDatabaseSetting(false), JavaSqlClient::new);
+                MySqlDataStorageSupplier supplier = new MySqlDataStorageSupplier(mainConfig.getSqlDatabaseSetting(false), JavaSqlClient::new);
                 return supplier.getStorage("economy", sqlKeyConverter, sqlValueConverter);
             }
             case "sqlite": {
-                SqliteDataStorageSupplier supplier = new SqliteDataStorageSupplier(instance.getDataFolder(), instance.get(MainConfig.class).getSqlDatabaseSetting(true), JavaSqlClient::new);
+                SqliteDataStorageSupplier supplier = new SqliteDataStorageSupplier(instance.getDataFolder(), mainConfig.getSqlDatabaseSetting(true), JavaSqlClient::new);
                 return supplier.getStorage("economy", sqlKeyConverter, sqlValueConverter);
             }
             case "json":
@@ -102,21 +113,6 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     }
 
     @Override
-    public void load() {
-        storageAgent = new StorageAgent<>(getStorage());
-        agents.add(storageAgent);
-        entryAgents.add(storageAgent);
-        agents.add(storageAgent.getLoadAgent(this));
-        agents.add(new SpigotRunnableAgent(storageAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getSaveFilePeriod()));
-
-        snapshotAgent = SnapshotAgent.create(this);
-        snapshotAgent.setComparator(Comparator.reverseOrder());
-        snapshotAgent.setFilter(entry -> entry.getValue() != null);
-        agents.add(snapshotAgent);
-        agents.add(new SpigotRunnableAgent(snapshotAgent, AsyncScheduler.get(instance), instance.get(MainConfig.class).getUpdateBalanceTopPeriod()));
-    }
-
-    @Override
     public void enable() {
         register();
     }
@@ -131,14 +127,14 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     }
 
     public boolean hasAccount(UUID uuid) {
-        return getOrCreateEntry(uuid).getValue() != null;
+        return getEntry(uuid).map(DataEntry::getValue).isPresent();
     }
 
     public boolean createAccount(UUID uuid) {
         if (hasAccount(uuid)) {
             return false;
         }
-        getOrCreateEntry(uuid).setValue(instance.get(MainConfig.class).getStartAmount());
+        getOrCreateEntry(uuid).setValue(mainConfig.getStartAmount());
         return true;
     }
 
@@ -155,7 +151,7 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
     }
 
     public boolean set(UUID uuid, double amount) {
-        if (amount < instance.get(MainConfig.class).getMinimumAmount()) {
+        if (amount < mainConfig.getMinimumAmount()) {
             return false;
         }
         getOrCreateEntry(uuid).setValue(amount);
@@ -168,5 +164,13 @@ public class EconomyHolder extends SimpleDataHolder<UUID, Double> implements Age
 
     public boolean deposit(UUID uuid, double amount) {
         return set(uuid, get(uuid) + amount);
+    }
+
+    public StorageAgent<UUID, Double> getStorageAgent() {
+        return this.storageAgent;
+    }
+
+    public SnapshotAgent<UUID, Double> getSnapshotAgent() {
+        return this.snapshotAgent;
     }
 }
