@@ -276,7 +276,7 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>topper-spigot-agent-runnable</artifactId>
-            <version>4.0.0</version>
+            <version>4.5.0</version>
         </dependency>
 
         <dependency>
