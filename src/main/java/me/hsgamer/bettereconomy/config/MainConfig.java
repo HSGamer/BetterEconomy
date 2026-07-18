@@ -72,6 +72,11 @@ public interface MainConfig {
         return 0;
     }
 
+    @ConfigPath(value = {"extras", "minimum-pay"}, priority = 2)
+    default double getMinimumPay() {
+        return 0.0;
+    }
+
     @ConfigPath(value = {"database", "mysql", "host"}, priority = 3)
     default String getMysqlHost() {
         return "localhost";

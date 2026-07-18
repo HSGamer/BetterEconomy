@@ -67,6 +67,17 @@ public class PayCommand extends Command {
         }
         double amount = optionalAmount.get();
 
+        double minPay = instance.get(MainConfig.class).getMinimumPay();
+        if (amount < minPay) {
+            MessageUtils.sendMessage(sender,
+                    instance.get(MessageConfig.class).getGiveMinimumFail()
+                            .replace("{balance}", instance.get(MainConfig.class).format(amount))
+                            .replace("{name}", Optional.ofNullable(receiver.getName()).orElse(receiverUUID.toString()))
+                            .replace("{minimum-pay}", instance.get(MainConfig.class).format(minPay))
+            );
+            return false;
+        }
+
         holder.withdraw(playerUUID, amount);
         holder.deposit(receiverUUID, amount);
         MessageUtils.sendMessage(sender,
