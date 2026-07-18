@@ -63,6 +63,11 @@ public interface MessageConfig {
         return "&aSuccessfully set {balance} to {name}";
     }
 
+    @ConfigPath("give-minimum-fail")
+    default String getGiveMinimumFail() {
+        return "&cFailed to give {balance} to {name}. The minimum pay is {minimum-pay}.";
+    }
+
     @ConfigPath("give-fail")
     default String getGiveFail() {
         return "&cFailed to give {balance} to {name}";
